@@ -37,6 +37,10 @@ int main (void) {
 	resize(im,imreduite,tailleReduite);
 	imshow("image reduite", imreduite);
 
+	Mat dst = imread(imName);
+	cvtColor(im, dst, CV_RGB2HSV, 0);
+	imshow("image HSV", dst);
+
 	computeHistogram("histogramme", im);
 
 	//termine le programme lorsqu'une touche est frappee
