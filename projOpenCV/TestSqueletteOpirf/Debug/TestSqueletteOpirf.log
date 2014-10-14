@@ -1,0 +1,26 @@
+﻿La génération a démarré 14/10/2014 15:36:50.
+     1>Projet "H:\IRF\projOpenCV\TestSqueletteOpirf\TestSqueletteOpirf.vcxproj" sur le nœud 2 (build cible(s)).
+     1>InitializeBuildStatus:
+         Création de "Debug\TestSqueletteOpirf.unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
+       ClCompile:
+         Toutes les sorties sont à jour.
+       ManifestResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\TestSqueletteOpirf.exe.embed.manifest.res" Debug\TestSqueletteOpirf_manifest.rc 
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"H:\IRF\projOpenCV\Debug\TestSqueletteOpirf.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\build\x86\vc10\lib" opencv_core246d.lib opencv_highgui246d.lib opencv_imgproc246d.lib opencv_calib3d246d.lib opencv_features2d246d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\TestSqueletteOpirf.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"H:\IRF\projOpenCV\Debug\TestSqueletteOpirf.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"H:\IRF\projOpenCV\Debug\TestSqueletteOpirf.lib" /MACHINE:X86 Debug\TestSqueletteOpirf.exe.embed.manifest.res
+         Debug\histogram.obj
+         Debug\squelette_test_opencv.obj
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\TestSqueletteOpirf.exe.embed.manifest" /manifest Debug\TestSqueletteOpirf.exe.intermediate.manifest
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\TestSqueletteOpirf.exe.embed.manifest.res" Debug\TestSqueletteOpirf_manifest.rc 
+       LinkEmbedManifest:
+         Toutes les sorties sont à jour.
+         TestSqueletteOpirf.vcxproj -> H:\IRF\projOpenCV\Debug\TestSqueletteOpirf.exe
+       FinalizeBuildStatus:
+         Suppression du fichier "Debug\TestSqueletteOpirf.unsuccessfulbuild".
+         Mise à jour de l'horodatage "Debug\TestSqueletteOpirf.lastbuildstate".
+     1>Génération du projet "H:\IRF\projOpenCV\TestSqueletteOpirf\TestSqueletteOpirf.vcxproj" terminée (build cible(s)).
+
+La génération a réussi.
+
+Temps écoulé 00:00:00.86

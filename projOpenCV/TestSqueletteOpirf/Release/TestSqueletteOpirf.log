@@ -1,0 +1,15 @@
+﻿La génération a démarré 14/10/2014 15:38:09.
+     1>Projet "H:\IRF\projOpenCV\TestSqueletteOpirf\TestSqueletteOpirf.vcxproj" sur le nœud 2 (build cible(s)).
+     1>InitializeBuildStatus:
+         Mise à jour de l'horodatage "Release\TestSqueletteOpirf.unsuccessfulbuild".
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\include\opencv2" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\include\opencv" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\include" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt histogram.cpp squelette_test_opencv.cpp
+         histogram.cpp
+     1>C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\include\opencv\cv.h(63): fatal error C1083: Impossible d'ouvrir le fichier include : 'opencv2/core/core_c.h' : No such file or directory
+         squelette_test_opencv.cpp
+     1>C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\include\opencv\cv.h(63): fatal error C1083: Impossible d'ouvrir le fichier include : 'opencv2/core/core_c.h' : No such file or directory
+     1>Génération du projet "H:\IRF\projOpenCV\TestSqueletteOpirf\TestSqueletteOpirf.vcxproj" terminée (build cible(s)) -- ÉCHEC.
+
+ÉCHEC de la build.
+
+Temps écoulé 00:00:00.64
