@@ -70,7 +70,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\include\opencv2;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\include\opencv;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\modules\legacy\include;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\modules\objdetect\include;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\modules\video\include;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\modules\objdetect;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\modules\imgproc\include;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\modules\highgui\include;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\modules\flann\include;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\modules\features2d\include;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\modules\core\include;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\modules\calib3d\include;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\include\opencv2;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\include\opencv;C:\Program Files %28x86%29\OpenCV-2.4.6.0\opencv\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
