@@ -5,13 +5,13 @@ void computeHistogram(string histTitle, Mat img){
 	// INIT		
 	int histSize = 255; // Number of bins
 	float range[] = { 0, 255 } ; // Range of pixel values
-  const float* histRange = { range };  
+	const float* histRange = { range };  
 	bool uniform = true; 
 	bool accumulate = false;	
 	
 	// Number of histograms to compute (1: grayLevel or 3: BGR)
 	int numChannels = img.channels();
-  MatND* hist = new MatND[numChannels];
+	MatND* hist = new MatND[numChannels];
 	
 	// Split BRG if needed
 	vector<Mat> channels;
@@ -26,8 +26,8 @@ void computeHistogram(string histTitle, Mat img){
 
 	// DISPLAY
 	int hist_w = 1000; int hist_h = 600; // Size of the histogram's image
-  int bin_w = cvRound( (double)hist_w/(double)histSize ); // Width of a bin
-  Mat histImage( hist_h, hist_w, CV_8UC3, CV_RGB( 0,0,0) );
+	int bin_w = cvRound( (double)hist_w/(double)histSize ); // Width of a bin
+	Mat histImage( hist_h, hist_w, CV_8UC3, CV_RGB( 0,0,0) );
 	
 	Point pt1, pt2;
 	Scalar color;
@@ -54,13 +54,13 @@ void computeHistogram(string histTitle, Mat img){
 			// Draw a line						
 			pt1 = Point( bin_w*(idxBin-1), cvRound( float(hist_h) - (hist[idxChannel].at<float>(idxBin-1))*scale) );
 			pt2 = Point( bin_w*(idxBin), cvRound( float(hist_h) - (hist[idxChannel].at<float>(idxBin))*scale) );
-      line( histImage,  pt1 , pt2, color, 2, 8, 0  ); 
+			line( histImage,  pt1 , pt2, color, 2, 8, 0  ); 
       
 			/*
 			line( histImage, 
-						Point( bin_w*idxBin, hist_h ) , 
-						Point( bin_w*idxBin, hist_h - cvRound(hist[idxChannel].at<float>(idxBin)) ), 
-						CV_RGB(255,255,255));
+			Point( bin_w*idxBin, hist_h ) , 
+			Point( bin_w*idxBin, hist_h - cvRound(hist[idxChannel].at<float>(idxBin)) ), 
+			CV_RGB(255,255,255));
 			*/
 		}   
 	}
@@ -69,4 +69,5 @@ void computeHistogram(string histTitle, Mat img){
 	//waitKey(0);
 
 	delete[]hist;
+
 }

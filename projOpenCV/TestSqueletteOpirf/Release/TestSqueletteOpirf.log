@@ -1,25 +1,20 @@
-﻿La génération a démarré 14/10/2014 16:21:16.
-     1>Projet "C:\Users\rjahn\Documents\IRF\projOpenCV\TestSqueletteOpirf\TestSqueletteOpirf.vcxproj" sur le nœud 2 (build cible(s)).
-     1>InitializeBuildStatus:
-         Création de "Release\TestSqueletteOpirf.unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
-       ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\modules\legacy\include" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\modules\objdetect\include" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\modules\video\include" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\modules\objdetect" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\modules\imgproc\include" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\modules\highgui\include" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\modules\flann\include" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\modules\features2d\include" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\modules\core\include" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\modules\calib3d\include" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\include\opencv2" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\include\opencv" /I"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\include" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt squelette_test_opencv.cpp
-         squelette_test_opencv.cpp
-     1>c:\program files (x86)\opencv-2.4.6.0\opencv\modules\flann\include\opencv2\flann\logger.h(66): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(234) : voir la déclaration de 'fopen'
-       Link:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\rjahn\Documents\IRF\projOpenCV\Release\TestSqueletteOpirf.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\build\x86\vc10\lib" opencv_core246.lib opencv_highgui246.lib opencv_imgproc246.lib opencv_calib3d246.lib opencv_features2d246.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\TestSqueletteOpirf.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\rjahn\Documents\IRF\projOpenCV\Release\TestSqueletteOpirf.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\rjahn\Documents\IRF\projOpenCV\Release\TestSqueletteOpirf.lib" /MACHINE:X86 Release\histogram.obj
+﻿La génération a démarré 04/11/2014 17:37:32.
+     1>Projet "C:\Users\xfraboul\Desktop\IRF\projOpenCV\TestSqueletteOpirf\TestSqueletteOpirf.vcxproj" sur le nœud 2 (Build cible(s)).
+     1>Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\xfraboul\Desktop\IRF\projOpenCV\Release\TestSqueletteOpirf.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Program Files (x86)\OpenCV-2.4.6.0\opencv\build\x86\vc10\lib" opencv_core246.lib opencv_highgui246.lib opencv_imgproc246.lib opencv_calib3d246.lib opencv_features2d246.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\TestSqueletteOpirf.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\xfraboul\Desktop\IRF\projOpenCV\Release\TestSqueletteOpirf.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\xfraboul\Desktop\IRF\projOpenCV\Release\TestSqueletteOpirf.lib" /MACHINE:X86 Release\contours.obj
+         Release\contours2.obj
+         Release\crossfinder.obj
+         Release\edge.obj
+         Release\histogram.obj
+         Release\houghlines.obj
          Release\squelette_test_opencv.obj
          Génération de code en cours
          Fin de la génération du code
-         TestSqueletteOpirf.vcxproj -> C:\Users\rjahn\Documents\IRF\projOpenCV\Release\TestSqueletteOpirf.exe
+         TestSqueletteOpirf.vcxproj -> C:\Users\xfraboul\Desktop\IRF\projOpenCV\Release\TestSqueletteOpirf.exe
        Manifest:
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\rjahn\Documents\IRF\projOpenCV\Release\TestSqueletteOpirf.exe;#1" /manifest Release\TestSqueletteOpirf.exe.intermediate.manifest
-       FinalizeBuildStatus:
-         Suppression du fichier "Release\TestSqueletteOpirf.unsuccessfulbuild".
-         Mise à jour de l'horodatage "Release\TestSqueletteOpirf.lastbuildstate".
-     1>Génération du projet "C:\Users\rjahn\Documents\IRF\projOpenCV\TestSqueletteOpirf\TestSqueletteOpirf.vcxproj" terminée (build cible(s)).
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\xfraboul\Desktop\IRF\projOpenCV\Release\TestSqueletteOpirf.exe;#1" /manifest Release\TestSqueletteOpirf.exe.intermediate.manifest
+     1>Génération du projet "C:\Users\xfraboul\Desktop\IRF\projOpenCV\TestSqueletteOpirf\TestSqueletteOpirf.vcxproj" terminée (Build cible(s)).
 
 La génération a réussi.
 
-Temps écoulé 00:00:01.58
+Temps écoulé 00:00:00.87

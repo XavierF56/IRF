@@ -17,7 +17,7 @@
 using namespace std;
 using namespace cv;
 
-int main (void) {
+int main2 (void) {
 
 	//charge et affiche l'image 
 	string imName = "00000.png";

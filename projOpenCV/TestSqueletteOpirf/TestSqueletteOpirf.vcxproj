@@ -82,7 +82,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="contours.c" />
+    <ClCompile Include="contours2.cpp" />
+    <ClCompile Include="crossfinder.cpp" />
+    <ClCompile Include="edge.cpp" />
     <ClCompile Include="histogram.cpp" />
+    <ClCompile Include="houghlines.cpp" />
     <ClCompile Include="squelette_test_opencv.cpp" />
   </ItemGroup>
   <ItemGroup>
