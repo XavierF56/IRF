@@ -1,4 +1,5 @@
 #include "ImageAnalyser.h"
+#include "ReferenceSystem.h"
 
 ImageAnalyser::ImageAnalyser(int i){
 	string imgName = "00000.png";
@@ -47,6 +48,8 @@ void ImageAnalyser::analyse(){
 
 	circle(img, crossTop, 10, 2, 10);
 
+	printPoints();
+
 	displayMin(img, "img");
 }
 
@@ -82,6 +85,15 @@ void ImageAnalyser::getBottomCross()  {
 
 void ImageAnalyser::rotate() {
 	//todo create max min points from minMaxLoc and use it to rotate
+}
+
+void ImageAnalyser::printPoints() {
+	ReferenceSystem ref(crossBottom, crossTop);
+	vector<Point> vec = ref.getY();
+	for(auto it = vec.begin() ; it != vec.end() ; it++)
+	{
+		circle(img, *it, 10, 200, 10);
+	}
 }
 
 

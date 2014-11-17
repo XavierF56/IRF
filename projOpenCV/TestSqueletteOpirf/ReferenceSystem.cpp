@@ -6,8 +6,10 @@ ReferenceSystem::ReferenceSystem(Point bl, Point tr)
 	topRight = tr;
 	deltaX = topRight.x - bottomLeft.x;
 	deltaY = bottomLeft.y - topRight.y;
-	int tmp[] = {10, 20, 30};
-	listX = vector<int>(tmp, tmp+3);
+
+	cout << deltaY << endl;
+	float tmp[] = {0.2f , 0.3f, 0.4f};
+	listY = vector<float>(tmp, tmp+3);
 }
 
 ReferenceSystem::~ReferenceSystem(){
@@ -15,11 +17,14 @@ ReferenceSystem::~ReferenceSystem(){
 }
 
 vector<Point> ReferenceSystem::getY() {
-	vector<Point> ret();
+	vector<Point> ret;
 
 	for(auto it = listY.begin() ; it != listY.end() ; it++)
 	{
-
+		ret.push_back(Point(topRight.x, topRight.y + (int) (*it*deltaY)));
+		cout << Point(topRight.x, topRight.y + (int) (*it*deltaY)) << endl;
 	}
+
+	return ret;
 }
 
