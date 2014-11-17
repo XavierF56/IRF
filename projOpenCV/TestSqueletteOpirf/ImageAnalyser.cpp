@@ -43,6 +43,10 @@ void ImageAnalyser::analyse(){
 	this->getTopCross();
 	this->getBottomCross();
 
+	circle(img, crossBottom, 10, 2, 10);
+
+	circle(img, crossTop, 10, 2, 10);
+
 	displayMin(img, "img");
 }
 
@@ -54,13 +58,11 @@ void ImageAnalyser::getTopCross()  {
 
 	// Matching cross
 	cv::matchTemplate(subMat, cross, result, CV_TM_CCORR_NORMED);
-	minMaxLoc(result, NULL, NULL, NULL, &crossBottom);
+	minMaxLoc(result, NULL, NULL, NULL, &crossTop);
 
 	// Adjusting with half of image size 
-	crossBottom.x += 62;
-	crossBottom.y += 58;
-
-	circle(subMat, crossBottom, 10, 2, 10);
+	crossTop.x += 3*img.cols/4 +  62;
+	crossTop.y += 58;
 }
 
 void ImageAnalyser::getBottomCross()  {
@@ -75,10 +77,14 @@ void ImageAnalyser::getBottomCross()  {
 
 	// Adjusting with half of image size 
 	crossBottom.x += 62;
-	crossBottom.y += 58;
-
-	circle(subMat, crossBottom, 10, 2, 10);
+	crossBottom.y += 3*img.rows/4 +  58;
 }
+
+void ImageAnalyser::rotate() {
+	//todo create max min points from minMaxLoc and use it to rotate
+}
+
+
 
 int main(int argc, char* argv[])
 {

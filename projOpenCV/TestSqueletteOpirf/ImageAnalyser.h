@@ -23,4 +23,5 @@ class ImageAnalyser
 		void getTopCross();
 		void getBottomCross();
 		static void displayMin(Mat, string);
+		void rotate();
 };
