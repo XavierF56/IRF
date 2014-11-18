@@ -13,7 +13,7 @@ class ImageAnalyser
 	private:
 		Mat img, cross;
 		Point crossTop, crossBottom, crossTopMax, crossBottomMax, crossTopMin, crossBottomMin;
-		static const int reduction = 5;
+		static const int reduction = 3;
 
 	public:
 		ImageAnalyser(int);

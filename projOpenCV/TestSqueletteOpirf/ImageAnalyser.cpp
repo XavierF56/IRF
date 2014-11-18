@@ -2,8 +2,8 @@
 #include "ReferenceSystem.h"
 
 ImageAnalyser::ImageAnalyser(int i){
-	string imgName = "w000-scans/00000.png";
-	//string imgName = "hello.png";
+	//string imgName = "w000-scans/00000.png";
+	string imgName = "hello.png";
 	string crossName = "cross.png";
 
 	//read input image
@@ -51,7 +51,7 @@ void ImageAnalyser::analyse(){
 
 	circle(img, crossTop, 10, 2, 10);
 
-	//printPoints();
+	printPoints();
 
 	displayMin(img, "img");
 }
