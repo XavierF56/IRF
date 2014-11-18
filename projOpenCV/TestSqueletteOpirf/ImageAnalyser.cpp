@@ -34,6 +34,8 @@ void ImageAnalyser::displayMin(Mat input, string name) {
 	Mat res = Mat(tailleReduite, CV_8UC3); //cree une image à 3 canaux de profondeur 8 bits chacuns
 	resize(input, res, tailleReduite);
 	imshow(name, res);
+
+
 }
 
 void ImageAnalyser::analyse(){
@@ -94,6 +96,28 @@ void ImageAnalyser::printPoints() {
 	{
 		circle(img, *it, 2, 200, 10);
 	}
+
+	vector<Point> vec1 = ref.getX();
+	for(auto it = vec1.begin() ; it != vec1.end() ; it++)
+	{
+		circle(img, *it, 2, 200, 10);
+	}
+}
+
+void ImageAnalyser::extract(int pointX, int pointY, int width, int height) {
+	/*int pointX = 628;
+	int pointY = 783;
+	int width = 235;
+	int height = 235;*/
+
+	//Make a rectangle
+	Rect roi(pointX,pointY,width,height);
+	//Point a cv::Mat header at it (no allocation is done)
+	Mat image_roi = img(roi);
+	imshow("name", image_roi);
+	string filename = "C:/Users/rjahn/Desktop/test/00001.png";
+	imwrite(filename, image_roi);
+
 }
 
 
@@ -102,6 +126,7 @@ int main(int argc, char* argv[])
 {
 	ImageAnalyser img(1);
 	img.analyse();
+	img.extract(628, 783, 235, 235);
 
 	waitKey(0);
 

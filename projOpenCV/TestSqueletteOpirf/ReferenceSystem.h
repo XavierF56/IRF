@@ -20,6 +20,7 @@ class ReferenceSystem
 		~ReferenceSystem();
 		vector<Point> getPointsX();
 		vector<Point> getY();
+		vector<Point> getX();
 
 		
 };

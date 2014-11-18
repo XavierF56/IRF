@@ -18,6 +18,7 @@ class ImageAnalyser
 		ImageAnalyser(int);
 		~ImageAnalyser();
 		void analyse();
+		void extract(int pointX, int pointY, int width, int height);
 
 	private:
 		void getTopCross();
