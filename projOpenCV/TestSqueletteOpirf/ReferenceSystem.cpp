@@ -9,14 +9,12 @@ ReferenceSystem::ReferenceSystem(Point bl, Point tr)
 
 	
 	cout << deltaY << endl;
-	double tmp[] = {0.091, 0.182, 0.217, 0.308, 0.343, 0.434, 0.470, 0.561, 0.596, 0.687 };
-	listY = vector<double>(tmp, tmp+10);
+	double tmp[] = {0.091, 0.181, 0.217, 0.307, 0.343, 0.433, 0.470, 0.560, 0.595, 0.685, 0.721, 0.811, 0.847, 0.937 };
+	listY = vector<double>(tmp, tmp+14);
 	
 	cout << deltaX << endl;
 	double tmpX[] = {0.0255, -0.105, -0.155, -0.285, -0.335, -0.464, -0.512, -0.641, -0.692, -0.821};
 	listX = vector<double>(tmpX, tmpX+10);
-
-
 }
 
 ReferenceSystem::~ReferenceSystem(){
@@ -29,7 +27,7 @@ vector<Point> ReferenceSystem::getY() {
 	for(auto it = listY.begin() ; it != listY.end() ; it++)
 	{
 		ret.push_back(Point(topRight.x, topRight.y + (int) (*it*deltaY)));
-		cout << Point(topRight.x, topRight.y + (int) (*it*deltaY)) << endl;
+		//cout << Point(topRight.x, topRight.y + (int) (*it*deltaY)) << endl;
 	}
 
 	return ret;

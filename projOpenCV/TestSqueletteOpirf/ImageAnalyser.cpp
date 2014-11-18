@@ -2,7 +2,8 @@
 #include "ReferenceSystem.h"
 
 ImageAnalyser::ImageAnalyser(int i){
-	string imgName = "00000.png";
+	//string imgName = "w000-scans/00000.png";
+	string imgName = "hello.png";
 	string crossName = "cross.png";
 
 	//read input image
@@ -20,6 +21,8 @@ ImageAnalyser::ImageAnalyser(int i){
 	}
 
 	cvtColor(cross, cross, CV_RGB2GRAY);
+
+	
 
 	//threshold(img, img, 250.0, 255.0, THRESH_BINARY);
 	//threshold(cross, cross, 250.0, 255.0, THRESH_BINARY);
@@ -41,10 +44,10 @@ void ImageAnalyser::displayMin(Mat input, string name) {
 void ImageAnalyser::analyse(){
 	
 	
-	cout << img.cols << " " << img.rows << endl;
-	
 	this->getTopCross();
 	this->getBottomCross();
+	this->rotate();
+	
 
 	circle(img, crossBottom, 10, 2, 10);
 
@@ -66,8 +69,8 @@ void ImageAnalyser::getTopCross()  {
 	minMaxLoc(result, NULL, NULL, NULL, &crossTop);
 
 	// Adjusting with half of image size 
-	crossTop.x += 3*img.cols/4 +  62;
-	crossTop.y += 58;
+	crossTop.x += 3*img.cols/4 + cross.cols/2;
+	crossTop.y += cross.rows/2;
 }
 
 void ImageAnalyser::getBottomCross()  {
@@ -81,12 +84,40 @@ void ImageAnalyser::getBottomCross()  {
 	minMaxLoc(result, NULL, NULL, NULL, &crossBottom);
 
 	// Adjusting with half of image size 
-	crossBottom.x += 62;
-	crossBottom.y += 3*img.rows/4 +  58;
+	crossBottom.x += cross.cols/2;
+	crossBottom.y += 3*img.rows/4 + cross.rows/2;
 }
 
 void ImageAnalyser::rotate() {
 	//todo create max min points from minMaxLoc and use it to rotate
+	// recalculate top cross for new repere
+
+	double goodRatio = sqrt(2.0);
+	double imgRatio = ((double)crossBottom.y - (double)crossTop.y)/((double)crossTop.x - (double)crossBottom.x);
+
+	double goodAngle = atan(goodRatio) * 180 / PI;
+	double imgAngle = atan(imgRatio) * 180 / PI;
+
+	//cout << "Ratio : " << imgRatio << endl << "good : " << goodAngle << endl << "bad : " << imgAngle << endl;
+	//cout << "Top : " <<  crossTop << endl << "Bottom : " << crossBottom << endl;
+
+    cv::Mat r = cv::getRotationMatrix2D(crossBottom, goodAngle-imgAngle, 1);
+
+	Mat dst;
+
+    cv::warpAffine(img, dst, r, cv::Size(img.cols, img.rows));
+
+	//displayMin(dst, "dst");
+	
+	// Replace old image with rotated 
+	img = dst;
+
+	// Racalculate topCross after rotation
+	this->getTopCross();
+
+
+	imgRatio = ((double)crossBottom.y - (double)crossTop.y)/((double)crossTop.x - (double)crossBottom.x);
+	cout << "Ratio : " << imgRatio << endl;
 }
 
 void ImageAnalyser::printPoints() {
