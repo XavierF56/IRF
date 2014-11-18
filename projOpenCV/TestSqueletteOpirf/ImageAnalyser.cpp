@@ -92,7 +92,7 @@ void ImageAnalyser::printPoints() {
 	vector<Point> vec = ref.getY();
 	for(auto it = vec.begin() ; it != vec.end() ; it++)
 	{
-		circle(img, *it, 10, 200, 10);
+		circle(img, *it, 2, 200, 10);
 	}
 }
 

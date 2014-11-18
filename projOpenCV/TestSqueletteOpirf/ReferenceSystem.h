@@ -13,7 +13,7 @@ class ReferenceSystem
 	private:
 		Point topRight, bottomLeft;
 		int deltaX, deltaY;
-		vector<float> listX, listY;
+		vector<double> listX, listY;
 
 	public:
 		ReferenceSystem(Point, Point);

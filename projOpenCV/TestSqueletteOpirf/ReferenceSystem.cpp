@@ -8,8 +8,8 @@ ReferenceSystem::ReferenceSystem(Point bl, Point tr)
 	deltaY = bottomLeft.y - topRight.y;
 
 	cout << deltaY << endl;
-	float tmp[] = {0.2f , 0.3f, 0.4f};
-	listY = vector<float>(tmp, tmp+3);
+	double tmp[] = {0.091, 0.182, 0.217, 0.308, 0.343, 0.434, 0.470, 0.561, 0.596, 0.687,  };
+	listY = vector<double>(tmp, tmp+14);
 }
 
 ReferenceSystem::~ReferenceSystem(){
