@@ -3,6 +3,7 @@
 #include "opencv2/core/core.hpp"
 #include <math.h>
 #include <iostream>
+#define PI 3.1415926
 
 using namespace std;
 using namespace cv;
@@ -11,8 +12,8 @@ class ImageAnalyser
 {
 	private:
 		Mat img, cross;
-		Point crossTop, crossBottom;
-		static const int reduction = 2;
+		Point crossTop, crossBottom, crossTopMax, crossBottomMax, crossTopMin, crossBottomMin;
+		static const int reduction = 5;
 
 	public:
 		ImageAnalyser(int);
