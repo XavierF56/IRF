@@ -2,8 +2,8 @@
 #include "ReferenceSystem.h"
 
 ImageAnalyser::ImageAnalyser(int i){
-	//string imgName = "w000-scans/00000.png";
-	string imgName = "hello.png";
+	string imgName = "w000-scans/00021.png";
+	//string imgName = "hello.png";
 	string crossName = "cross.png";
 
 	//read input image
@@ -122,17 +122,17 @@ void ImageAnalyser::rotate() {
 
 void ImageAnalyser::printPoints() {
 	ReferenceSystem ref(crossBottom, crossTop);
-	vector<Point> vec = ref.getY();
+	vector<Point> vec = ref.getPoints();
 	for(auto it = vec.begin() ; it != vec.end() ; it++)
 	{
-		circle(img, *it, 2, 200, 10);
+		circle(img, *it, 5, 10, 10);
 	}
 
-	vector<Point> vec1 = ref.getX();
+	/*vector<Point> vec1 = ref.getX();
 	for(auto it = vec1.begin() ; it != vec1.end() ; it++)
 	{
 		circle(img, *it, 2, 200, 10);
-	}
+	}*/
 }
 
 void ImageAnalyser::extract(int pointX, int pointY, int width, int height) {
@@ -157,7 +157,7 @@ int main(int argc, char* argv[])
 {
 	ImageAnalyser img(1);
 	img.analyse();
-	img.extract(628, 783, 235, 235);
+	//img.extract(628, 783, 235, 235);
 
 	waitKey(0);
 

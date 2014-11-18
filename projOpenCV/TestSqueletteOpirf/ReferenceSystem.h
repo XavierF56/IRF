@@ -12,13 +12,14 @@ class ReferenceSystem
 {
 	private:
 		Point topRight, bottomLeft;
-		int deltaX, deltaY;
-		vector<double> listX, listY;
+		int deltaX, deltaY, xSymbol, sizeImage, sizeSymbol;
+		vector<double> listX, listY, listSymbol;
 
 	public:
 		ReferenceSystem(Point, Point);
 		~ReferenceSystem();
-		vector<Point> getPointsX();
+		vector<Point> getPoints();
+		vector<Point> getPointsSymbols();
 		vector<Point> getY();
 		vector<Point> getX();
 

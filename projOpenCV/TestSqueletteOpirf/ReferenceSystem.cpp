@@ -9,12 +9,14 @@ ReferenceSystem::ReferenceSystem(Point bl, Point tr)
 
 	
 	cout << deltaY << endl;
-	double tmp[] = {0.091, 0.181, 0.217, 0.307, 0.343, 0.433, 0.470, 0.560, 0.595, 0.685, 0.721, 0.811, 0.847, 0.937 };
-	listY = vector<double>(tmp, tmp+14);
+	//double tmp[] = {0.091, 0.181, 0.217, 0.307, 0.343, 0.433, 0.470, 0.560, 0.595, 0.685, 0.721, 0.811, 0.847, 0.937 };
+	double tmp[] = {0.091,  0.217, 0.343,  0.470,  0.595,  0.721,  0.847 };
+	listY = vector<double>(tmp, tmp+7);
 	
 	cout << deltaX << endl;
-	double tmpX[] = {0.0255, -0.105, -0.155, -0.285, -0.335, -0.464, -0.512, -0.641, -0.692, -0.821};
-	listX = vector<double>(tmpX, tmpX+10);
+	//double tmpX[] = {0.025, -0.102, -0.154, -0.281, -0.333, -0.460, -0.512, -0.639, -0.691, -0.818};
+	double tmpX[] = {-0.102,  -0.281,  -0.460,  -0.639,  -0.818};
+	listX = vector<double>(tmpX, tmpX+5);
 }
 
 ReferenceSystem::~ReferenceSystem(){
@@ -45,4 +47,18 @@ vector<Point> ReferenceSystem::getX() {
 	return ret;
 }
 
+
+vector<Point> ReferenceSystem::getPoints() {
+	vector<Point> ret;
+
+	for(auto itx = listX.begin() ; itx != listX.end() ; itx++)
+	{
+		for(auto ity = listY.begin() ; ity != listY.end() ; ity++)
+		{
+			ret.push_back(Point(topRight.x + (int) (*itx*deltaX), topRight.y + (int) (*ity*deltaY)));
+		}
+	}
+
+	return ret;
+}
 
