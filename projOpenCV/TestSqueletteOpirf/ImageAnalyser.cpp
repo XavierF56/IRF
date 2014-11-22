@@ -1,18 +1,19 @@
 #include "ImageAnalyser.h"
 #include "ReferenceSystem.h"
 
-ImageAnalyser::ImageAnalyser(int i){
-	string imgName = "w000-scans/00003.png";
-	//string imgName = "hello.png";
+
+ImageAnalyser::ImageAnalyser(string imageName){
 	string crossName = "cross.png";
 
 	//read input image
-	img = imread(imgName);
+	original = imread(imageName);
+	img = original;
+
 	if (img.data == NULL){
-		cerr << "Image not found: " << imgName << endl;
+		cerr << "Image not found: " << imageName << endl;
 		exit(0);
 	}
-	cvtColor(img, img, CV_RGB2GRAY);
+	cvtColor(original, img, CV_RGB2GRAY);
 
 	cross = imread(crossName);
 	if (img.data == NULL){
@@ -22,11 +23,15 @@ ImageAnalyser::ImageAnalyser(int i){
 
 	cvtColor(cross, cross, CV_RGB2GRAY);
 
+
 	/*string* tmp = ["accident", "bomb", "car", "casualty", "electricity", "fire", "fire_brigade", "flood", "gas", "injury", "paramedics", "person", "police", "roadblock"];
 	labels = vector<string>;*/
 
 	//threshold(img, img, 250.0, 255.0, THRESH_BINARY);
 	//threshold(cross, cross, 250.0, 255.0, THRESH_BINARY);
+
+	labels = vector<string>(5);
+	labels.push_back("hello");
 }
 
 ImageAnalyser::~ImageAnalyser(){
@@ -43,19 +48,21 @@ void ImageAnalyser::displayMin(Mat input, string name) {
 }
 
 void ImageAnalyser::analyse(){
-	
-	
 	this->getTopCross();
 	this->getBottomCross();
 	this->rotate();
 	
 
 	circle(img, crossBottom, 10, 2, 10);
-
 	circle(img, crossTop, 10, 2, 10);
 
-	//printPoints();
 
+	ReferenceSystem ref(crossBottom, crossTop);
+	points = ref.getPoints();
+	widthImage = ref.getWidthImage();
+
+	printPoints();
+	
 	displayMin(img, "img");
 
 
@@ -125,9 +132,7 @@ void ImageAnalyser::getTemplate()  {
 }
 
 void ImageAnalyser::rotate() {
-	//todo create max min points from minMaxLoc and use it to rotate
-	// recalculate top cross for new repere
-
+	// calculating ratio, a corretc image should have sqrt(2.0)
 	double goodRatio = sqrt(2.0);
 	double imgRatio = ((double)crossBottom.y - (double)crossTop.y)/((double)crossTop.x - (double)crossBottom.x);
 
@@ -138,64 +143,58 @@ void ImageAnalyser::rotate() {
 	//cout << "Top : " <<  crossTop << endl << "Bottom : " << crossBottom << endl;
 
     cv::Mat r = cv::getRotationMatrix2D(crossBottom, goodAngle-imgAngle, 1);
-
 	Mat dst;
 
+	// Rotating greyscaled image
     cv::warpAffine(img, dst, r, cv::Size(img.cols, img.rows));
-
-	//displayMin(dst, "dst");
-	
-	// Replace old image with rotated 
 	img = dst;
+
+	// Rotating original image
+	cv::warpAffine(original, dst, r, cv::Size(img.cols, img.rows));
+	original = dst;
 
 	// Racalculate topCross after rotation
 	this->getTopCross();
 
 
-	imgRatio = ((double)crossBottom.y - (double)crossTop.y)/((double)crossTop.x - (double)crossBottom.x);
-	cout << "Ratio : " << imgRatio << endl;
+	//imgRatio = ((double)crossBottom.y - (double)crossTop.y)/((double)crossTop.x - (double)crossBottom.x);
+	//cout << "Ratio : " << imgRatio << endl;
 }
 
 void ImageAnalyser::printPoints() {
-	ReferenceSystem ref(crossBottom, crossTop);
-	vector<Point> vec = ref.getPoints();
-	for(auto it = vec.begin() ; it != vec.end() ; it++)
+	for(auto it = points.begin() ; it != points.end() ; it++)
 	{
 		circle(img, *it, 5, 10, 10);
+		cout << *it << endl;
 	}
-
-	/*vector<Point> vec1 = ref.getX();
-	for(auto it = vec1.begin() ; it != vec1.end() ; it++)
-	{
-		circle(img, *it, 2, 200, 10);
-	}*/
 }
 
-void ImageAnalyser::extract(int pointX, int pointY, int width, int height) {
-	/*int pointX = 628;
-	int pointY = 783;
-	int width = 235;
-	int height = 235;*/
+Mat ImageAnalyser::extract(int row, int column) {
+	int index = (row-1)*5 + column -1;
+	Point imagePoint = points[index];
 
-	//Make a rectangle
-	Rect roi(pointX,pointY,width,height);
-	//Point a cv::Mat header at it (no allocation is done)
-	Mat image_roi = img(roi);
+	Mat image_roi = original(Rect(imagePoint.x, imagePoint.y, widthImage, widthImage));
 	imshow("name", image_roi);
-	string filename = "C:/Users/rjahn/Desktop/test/00001.png";
-	imwrite(filename, image_roi);
 
+	return image_roi;
+}
+
+
+string ImageAnalyser::getLabel(int row) {
+	return "blabla";
+	return labels[row-1];
 }
 
 
 
 int main(int argc, char* argv[])
 {
-	ImageAnalyser img(1);
+	ImageAnalyser img("w000-scans/00001.png");
 	img.analyse();
-	//img.extract(628, 783, 235, 235);
+	img.extract(2, 2);
 
 	waitKey(0);
 
 	return 0;
 }
+

@@ -11,17 +11,20 @@ using namespace cv;
 class ImageAnalyser
 {
 	private:
-		Mat img, cross;
+		Mat img, cross, original;
 		Point crossTop, crossBottom, crossTopMax, crossBottomMax, crossTopMin, crossBottomMin;
+		vector<Point> points;
 		static const int reduction = 3;
 		vector<string> temps;
 		vector<string> labels;
+		int widthImage;
 
 	public:
-		ImageAnalyser(int);
+		ImageAnalyser(string imageName);
 		~ImageAnalyser();
 		void analyse();
-		void extract(int pointX, int pointY, int width, int height);
+		Mat extract(int row, int column);
+		string getLabel(int row);
 
 	private:
 		void getTopCross();

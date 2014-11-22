@@ -12,7 +12,8 @@ class ReferenceSystem
 {
 	private:
 		Point topRight, bottomLeft;
-		int deltaX, deltaY, xSymbol, sizeImage, sizeSymbol;
+		int deltaX, deltaY, xSymbol, sizeSymbol;
+		double widthImage;
 		vector<double> listX, listY, listSymbol;
 
 	public:
@@ -22,4 +23,7 @@ class ReferenceSystem
 		vector<Point> getPointsSymbols();
 		vector<Point> getY();
 		vector<Point> getX();
+
+		int getWidthImage();
+
 };
