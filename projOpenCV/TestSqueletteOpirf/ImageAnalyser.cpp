@@ -143,7 +143,7 @@ string ImageAnalyser::getLabel(int row) {
 
 
 
-int main(int argc, char* argv[])
+int main2(int argc, char* argv[])
 {
 	ImageAnalyser img("w000-scans/00001.png");
 	img.analyse();
