@@ -54,7 +54,8 @@ void ImageAnalyser::analyse(){
 	circle(img, crossTop, 10, 2, 10);
 
 	ReferenceSystem ref(crossBottom, crossTop);
-	vector<Point> vec = ref.getPoints();
+	points = ref.getPoints();
+	widthImage = ref.getWidthImage();
 
 	printPoints();
 	
@@ -131,23 +132,21 @@ void ImageAnalyser::printPoints() {
 }
 
 void ImageAnalyser::extract(int row, int column) {
-	/*int pointX = 628;
-	int pointY = 783;
-	int width = 235;
-	int height = 235;*/
-
+	cout << row;
+	Point imagePoint = points[(row-1)*5 + column -1 ];
 	//Make a rectangle
-	Rect roi(pointX,pointY,width,height);
+	Rect roi(imagePoint.x, imagePoint.y, widthImage, widthImage);
+
 	//Point a cv::Mat header at it (no allocation is done)
 	Mat image_roi = img(roi);
 	imshow("name", image_roi);
-	string filename = "C:/Users/rjahn/Desktop/test/00001.png";
-	imwrite(filename, image_roi);
+	//string filename = "C:/Users/rjahn/Desktop/test/00001.png";
+	//imwrite(filename, image_roi);
 }
 
 
 string ImageAnalyser::getLabel(int row) {
-
+	return "fire";
 }
 
 
@@ -155,7 +154,7 @@ int main(int argc, char* argv[])
 {
 	ImageAnalyser img(1);
 	img.analyse();
-	//img.extract(628, 783, 235, 235);
+	img.extract(1, 2);
 
 	waitKey(0);
 

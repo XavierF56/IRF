@@ -15,6 +15,7 @@ class ImageAnalyser
 		Point crossTop, crossBottom, crossTopMax, crossBottomMax, crossTopMin, crossBottomMin;
 		vector<Point> points;
 		static const int reduction = 3;
+		int widthImage;
 
 	public:
 		ImageAnalyser(int);

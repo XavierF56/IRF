@@ -2,6 +2,7 @@
 
 ReferenceSystem::ReferenceSystem(Point bl, Point tr)
 {
+	widthImage = 0.09;
 	bottomLeft = bl;
 	topRight = tr;
 	deltaX = topRight.x - bottomLeft.x;
@@ -62,3 +63,7 @@ vector<Point> ReferenceSystem::getPoints() {
 	return ret;
 }
 
+// TODO: Improve ...
+int ReferenceSystem::getWidthImage() {
+	return widthImage * deltaX;
+}
