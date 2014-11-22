@@ -17,7 +17,7 @@ class ImageAnalyser
 		static const int reduction = 3;
 
 	public:
-		ImageAnalyser(int);
+		ImageAnalyser(string imageName);
 		~ImageAnalyser();
 		void analyse();
 		void extract(int row, int column);

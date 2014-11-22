@@ -1,15 +1,13 @@
 #include "ImageAnalyser.h"
 #include "ReferenceSystem.h"
 
-ImageAnalyser::ImageAnalyser(int i){
-	string imgName = "w000-scans/00021.png";
-	//string imgName = "hello.png";
+ImageAnalyser::ImageAnalyser(string imageName){
 	string crossName = "cross.png";
 
 	//read input image
-	img = imread(imgName);
+	img = imread(imageName);
 	if (img.data == NULL){
-		cerr << "Image not found: " << imgName << endl;
+		cerr << "Image not found: " << imageName << endl;
 		exit(0);
 	}
 	cvtColor(img, img, CV_RGB2GRAY);
@@ -135,7 +133,7 @@ void ImageAnalyser::extract(int row, int column) {
 	int pointY = 783;
 	int width = 235;
 	int height = 235;*/
-
+	/*
 	//Make a rectangle
 	Rect roi(pointX,pointY,width,height);
 	//Point a cv::Mat header at it (no allocation is done)
@@ -143,14 +141,16 @@ void ImageAnalyser::extract(int row, int column) {
 	imshow("name", image_roi);
 	string filename = "C:/Users/rjahn/Desktop/test/00001.png";
 	imwrite(filename, image_roi);
+	*/
 }
 
 
 string ImageAnalyser::getLabel(int row) {
-
+	return "blabla";
 }
 
 
+/*
 int main(int argc, char* argv[])
 {
 	ImageAnalyser img(1);
@@ -161,3 +161,4 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
+*/

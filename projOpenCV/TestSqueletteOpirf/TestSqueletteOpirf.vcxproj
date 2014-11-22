@@ -83,10 +83,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ImageAnalyser.cpp" />
+    <ClCompile Include="ImagesExtractor.cpp" />
     <ClCompile Include="ReferenceSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImageAnalyser.h" />
+    <ClInclude Include="ImagesExtractor.h" />
     <ClInclude Include="ReferenceSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
