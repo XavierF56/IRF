@@ -13,13 +13,15 @@ class ImageAnalyser
 	private:
 		Mat img, cross;
 		Point crossTop, crossBottom, crossTopMax, crossBottomMax, crossTopMin, crossBottomMin;
+		vector<Point> points;
 		static const int reduction = 3;
 
 	public:
 		ImageAnalyser(int);
 		~ImageAnalyser();
 		void analyse();
-		void extract(int pointX, int pointY, int width, int height);
+		void extract(int row, int column);
+		string getLabel(int row);
 
 	private:
 		void getTopCross();

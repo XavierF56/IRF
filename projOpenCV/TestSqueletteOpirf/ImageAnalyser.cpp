@@ -53,8 +53,11 @@ void ImageAnalyser::analyse(){
 
 	circle(img, crossTop, 10, 2, 10);
 
-	printPoints();
+	ReferenceSystem ref(crossBottom, crossTop);
+	vector<Point> vec = ref.getPoints();
 
+	printPoints();
+	
 	displayMin(img, "img");
 }
 
@@ -121,21 +124,13 @@ void ImageAnalyser::rotate() {
 }
 
 void ImageAnalyser::printPoints() {
-	ReferenceSystem ref(crossBottom, crossTop);
-	vector<Point> vec = ref.getPoints();
-	for(auto it = vec.begin() ; it != vec.end() ; it++)
+	for(auto it = points.begin() ; it != points.end() ; it++)
 	{
 		circle(img, *it, 5, 10, 10);
 	}
-
-	/*vector<Point> vec1 = ref.getX();
-	for(auto it = vec1.begin() ; it != vec1.end() ; it++)
-	{
-		circle(img, *it, 2, 200, 10);
-	}*/
 }
 
-void ImageAnalyser::extract(int pointX, int pointY, int width, int height) {
+void ImageAnalyser::extract(int row, int column) {
 	/*int pointX = 628;
 	int pointY = 783;
 	int width = 235;
@@ -148,9 +143,12 @@ void ImageAnalyser::extract(int pointX, int pointY, int width, int height) {
 	imshow("name", image_roi);
 	string filename = "C:/Users/rjahn/Desktop/test/00001.png";
 	imwrite(filename, image_roi);
-
 }
 
+
+string ImageAnalyser::getLabel(int row) {
+
+}
 
 
 int main(int argc, char* argv[])
