@@ -2,7 +2,9 @@
 
 ReferenceSystem::ReferenceSystem(Point bl, Point tr)
 {
+
 	widthImage = 0.090;
+
 	bottomLeft = bl;
 	topRight = tr;
 	deltaX = topRight.x - bottomLeft.x;
@@ -12,11 +14,23 @@ ReferenceSystem::ReferenceSystem(Point bl, Point tr)
 	cout << deltaY << endl;
 	//double tmp[] = {0.091, 0.181, 0.217, 0.307, 0.343, 0.433, 0.470, 0.560, 0.595, 0.685, 0.721, 0.811, 0.847, 0.937 };
 	double tmp[] = {0.091,  0.217, 0.343,  0.470,  0.595,  0.721,  0.847 };
-	listY = vector<double>(tmp, tmp+7);
+	//double tmp[] = {0.091,  0.16, 0.217, 0.343, 0.412, 0.470,  0.595,  0.721,  0.847 }; //templates
+	listY = vector<double>(tmp, tmp+9);
+	cout << tmp[0] << endl;
 	
 	cout << deltaX << endl;
 	//double tmpX[] = {0.025, -0.102, -0.154, -0.281, -0.333, -0.460, -0.512, -0.639, -0.691, -0.818};
 	//double tmpX[] = {-0.102,  -0.281,  -0.460,  -0.639,  -0.818};
+
+	/*double tmpX[] = {-0.92, -1}; //templates
+	listX = vector<double>(tmpX, tmpX+2);
+	cout << tmpX[0] << endl;*/
+
+	//Rect roi(topRight.x + (int) (tmpX[1]*deltaX),topRight.y + (int) (tmp[0]*deltaY),165,165);
+	//Point a cv::Mat header at it (no allocation is done)
+	//Mat image_roi = img(roi);
+	//imshow("name", image_roi);
+
 	double tmpX[] = {-0.818, -0.639,-0.460,  -0.281, -0.102};
 	listX = vector<double>(tmpX, tmpX+5);
 }
