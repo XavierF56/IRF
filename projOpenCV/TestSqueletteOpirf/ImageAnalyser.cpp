@@ -140,6 +140,7 @@ Mat ImageAnalyser::extract(int row, int column) {
 
 
 string ImageAnalyser::getLabel(int row) {
+	return "blabla";
 	return labels[row-1];
 }
 

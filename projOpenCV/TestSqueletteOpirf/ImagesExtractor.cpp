@@ -3,8 +3,9 @@
 
 ImagesExtractor::ImagesExtractor(int i)
 {
-	string path = "\\\\bricolo\\p12\\5info\\irfBD\\NicIcon\\all-scans\\";
-	for( int i = 0; i <= 34; i++)
+	//string path = "\\\\bricolo\\p12\\5info\\irfBD\\NicIcon\\all-scans\\";
+	string folder = "C:\\Users\\rbaron\\Desktop\\Test\\";
+	for( int i = 0; i <= 0; i++)
 	{
 		string scripter;
 		stringstream ss1;
@@ -17,7 +18,7 @@ ImagesExtractor::ImagesExtractor(int i)
 			ss2 << std::setfill('0') << std::setw (2) << j;
 			ss2 >> page;
 			form = scripter + page;
-			ImageAnalyser imgAn(path + form);
+			ImageAnalyser imgAn("w" + scripter + "-scans/" + form + ".png");
 			for( int row = 1; row <= 7; row ++)
 			{
 				string label(imgAn.getLabel(row));
@@ -25,6 +26,8 @@ ImagesExtractor::ImagesExtractor(int i)
 				{
 					string filename = label + "_" + scripter + "_" + page + "_" + std::to_string((long double)row) + "_" + std::to_string((long double)column);
 					cout << filename << endl;
+					Mat img(imgAn.extract(row, column));
+					imwrite(folder + filename + ".png", img);
 				}
 			}
 
