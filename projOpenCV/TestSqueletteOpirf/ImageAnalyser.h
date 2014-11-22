@@ -14,6 +14,7 @@ class ImageAnalyser
 		Mat img, cross;
 		Point crossTop, crossBottom, crossTopMax, crossBottomMax, crossTopMin, crossBottomMin;
 		vector<Point> points;
+		vector<string> labels;
 		static const int reduction = 3;
 		int widthImage;
 

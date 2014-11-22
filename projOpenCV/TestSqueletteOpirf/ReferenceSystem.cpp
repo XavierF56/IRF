@@ -2,7 +2,7 @@
 
 ReferenceSystem::ReferenceSystem(Point bl, Point tr)
 {
-	widthImage = 0.09;
+	widthImage = 0.090;
 	bottomLeft = bl;
 	topRight = tr;
 	deltaX = topRight.x - bottomLeft.x;
@@ -16,7 +16,8 @@ ReferenceSystem::ReferenceSystem(Point bl, Point tr)
 	
 	cout << deltaX << endl;
 	//double tmpX[] = {0.025, -0.102, -0.154, -0.281, -0.333, -0.460, -0.512, -0.639, -0.691, -0.818};
-	double tmpX[] = {-0.102,  -0.281,  -0.460,  -0.639,  -0.818};
+	//double tmpX[] = {-0.102,  -0.281,  -0.460,  -0.639,  -0.818};
+	double tmpX[] = {-0.818, -0.639,-0.460,  -0.281, -0.102};
 	listX = vector<double>(tmpX, tmpX+5);
 }
 
@@ -52,9 +53,9 @@ vector<Point> ReferenceSystem::getX() {
 vector<Point> ReferenceSystem::getPoints() {
 	vector<Point> ret;
 
-	for(auto itx = listX.begin() ; itx != listX.end() ; itx++)
+	for(auto ity = listY.begin() ; ity != listY.end() ; ity++)
 	{
-		for(auto ity = listY.begin() ; ity != listY.end() ; ity++)
+		for(auto itx = listX.begin() ; itx != listX.end() ; itx++)
 		{
 			ret.push_back(Point(topRight.x + (int) (*itx*deltaX), topRight.y + (int) (*ity*deltaY)));
 		}
@@ -65,5 +66,5 @@ vector<Point> ReferenceSystem::getPoints() {
 
 // TODO: Improve ...
 int ReferenceSystem::getWidthImage() {
-	return widthImage * deltaX;
+	return (int) (widthImage * deltaY);
 }

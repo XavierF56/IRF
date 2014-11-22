@@ -128,25 +128,21 @@ void ImageAnalyser::printPoints() {
 	for(auto it = points.begin() ; it != points.end() ; it++)
 	{
 		circle(img, *it, 5, 10, 10);
+		cout << *it << endl;
 	}
 }
 
 void ImageAnalyser::extract(int row, int column) {
-	cout << row;
-	Point imagePoint = points[(row-1)*5 + column -1 ];
-	//Make a rectangle
-	Rect roi(imagePoint.x, imagePoint.y, widthImage, widthImage);
+	int index = (row-1)*5 + column -1;
+	Point imagePoint = points[index];
 
-	//Point a cv::Mat header at it (no allocation is done)
-	Mat image_roi = img(roi);
-	imshow("name", image_roi);
-	//string filename = "C:/Users/rjahn/Desktop/test/00001.png";
-	//imwrite(filename, image_roi);
+	Mat image_roi = img(Rect(imagePoint.x, imagePoint.y, widthImage, widthImage));
+	//imshow("name", image_roi);
 }
 
 
 string ImageAnalyser::getLabel(int row) {
-	return "fire";
+	return labels[row-1];
 }
 
 
@@ -154,7 +150,7 @@ int main(int argc, char* argv[])
 {
 	ImageAnalyser img(1);
 	img.analyse();
-	img.extract(1, 2);
+	img.extract(2, 2);
 
 	waitKey(0);
 
