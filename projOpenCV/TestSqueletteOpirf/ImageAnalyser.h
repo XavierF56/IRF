@@ -11,7 +11,7 @@ using namespace cv;
 class ImageAnalyser
 {
 	private:
-		Mat img, cross;
+		Mat img, cross, original;
 		Point crossTop, crossBottom, crossTopMax, crossBottomMax, crossTopMin, crossBottomMin;
 		vector<Point> points;
 		vector<string> labels;

@@ -5,12 +5,14 @@ ImageAnalyser::ImageAnalyser(string imageName){
 	string crossName = "cross.png";
 
 	//read input image
-	img = imread(imageName);
+	original = imread(imageName);
+	img = original;
+
 	if (img.data == NULL){
 		cerr << "Image not found: " << imageName << endl;
 		exit(0);
 	}
-	cvtColor(img, img, CV_RGB2GRAY);
+	cvtColor(original, img, CV_RGB2GRAY);
 
 	cross = imread(crossName);
 	if (img.data == NULL){
@@ -20,10 +22,8 @@ ImageAnalyser::ImageAnalyser(string imageName){
 
 	cvtColor(cross, cross, CV_RGB2GRAY);
 
-	
-
-	//threshold(img, img, 250.0, 255.0, THRESH_BINARY);
-	//threshold(cross, cross, 250.0, 255.0, THRESH_BINARY);
+	labels = vector<string>(5);
+	labels.push_back("hello");
 }
 
 ImageAnalyser::~ImageAnalyser(){
@@ -40,15 +40,12 @@ void ImageAnalyser::displayMin(Mat input, string name) {
 }
 
 void ImageAnalyser::analyse(){
-	
-	
 	this->getTopCross();
 	this->getBottomCross();
 	this->rotate();
 	
 
 	circle(img, crossBottom, 10, 2, 10);
-
 	circle(img, crossTop, 10, 2, 10);
 
 	ReferenceSystem ref(crossBottom, crossTop);
@@ -91,9 +88,7 @@ void ImageAnalyser::getBottomCross()  {
 }
 
 void ImageAnalyser::rotate() {
-	//todo create max min points from minMaxLoc and use it to rotate
-	// recalculate top cross for new repere
-
+	// calculating ratio, a corretc image should have sqrt(2.0)
 	double goodRatio = sqrt(2.0);
 	double imgRatio = ((double)crossBottom.y - (double)crossTop.y)/((double)crossTop.x - (double)crossBottom.x);
 
@@ -104,22 +99,22 @@ void ImageAnalyser::rotate() {
 	//cout << "Top : " <<  crossTop << endl << "Bottom : " << crossBottom << endl;
 
     cv::Mat r = cv::getRotationMatrix2D(crossBottom, goodAngle-imgAngle, 1);
-
 	Mat dst;
 
+	// Rotating greyscaled image
     cv::warpAffine(img, dst, r, cv::Size(img.cols, img.rows));
-
-	//displayMin(dst, "dst");
-	
-	// Replace old image with rotated 
 	img = dst;
+
+	// Rotating original image
+	cv::warpAffine(original, dst, r, cv::Size(img.cols, img.rows));
+	original = dst;
 
 	// Racalculate topCross after rotation
 	this->getTopCross();
 
 
-	imgRatio = ((double)crossBottom.y - (double)crossTop.y)/((double)crossTop.x - (double)crossBottom.x);
-	cout << "Ratio : " << imgRatio << endl;
+	//imgRatio = ((double)crossBottom.y - (double)crossTop.y)/((double)crossTop.x - (double)crossBottom.x);
+	//cout << "Ratio : " << imgRatio << endl;
 }
 
 void ImageAnalyser::printPoints() {
@@ -134,7 +129,9 @@ Mat ImageAnalyser::extract(int row, int column) {
 	int index = (row-1)*5 + column -1;
 	Point imagePoint = points[index];
 
-	Mat image_roi = img(Rect(imagePoint.x, imagePoint.y, widthImage, widthImage));
+	Mat image_roi = original(Rect(imagePoint.x, imagePoint.y, widthImage, widthImage));
+	imshow("name", image_roi);
+
 	return image_roi;
 }
 
@@ -145,10 +142,10 @@ string ImageAnalyser::getLabel(int row) {
 }
 
 
-/*
+
 int main(int argc, char* argv[])
 {
-	ImageAnalyser img(1);
+	ImageAnalyser img("w000-scans/00001.png");
 	img.analyse();
 	img.extract(2, 2);
 
@@ -156,4 +153,4 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-*/
+
