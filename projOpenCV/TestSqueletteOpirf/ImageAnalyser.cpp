@@ -1,16 +1,15 @@
 #include "ImageAnalyser.h"
 #include "ReferenceSystem.h"
 
-ImageAnalyser::ImageAnalyser(int i){
-	string imgName = "w000-scans/00021.png";
-	//string imgName = "hello.png";
+ImageAnalyser::ImageAnalyser(string imageName){
 	string crossName = "cross.png";
 
 	//read input image
-	original = imread(imgName);
+	original = imread(imageName);
 	img = original;
+
 	if (img.data == NULL){
-		cerr << "Image not found: " << imgName << endl;
+		cerr << "Image not found: " << imageName << endl;
 		exit(0);
 	}
 	cvtColor(original, img, CV_RGB2GRAY);
@@ -22,6 +21,9 @@ ImageAnalyser::ImageAnalyser(int i){
 	}
 
 	cvtColor(cross, cross, CV_RGB2GRAY);
+
+	labels = vector<string>(5);
+	labels.push_back("hello");
 }
 
 ImageAnalyser::~ImageAnalyser(){
@@ -123,12 +125,14 @@ void ImageAnalyser::printPoints() {
 	}
 }
 
-void ImageAnalyser::extract(int row, int column) {
+Mat ImageAnalyser::extract(int row, int column) {
 	int index = (row-1)*5 + column -1;
 	Point imagePoint = points[index];
 
 	Mat image_roi = original(Rect(imagePoint.x, imagePoint.y, widthImage, widthImage));
 	imshow("name", image_roi);
+
+	return image_roi;
 }
 
 
@@ -137,9 +141,10 @@ string ImageAnalyser::getLabel(int row) {
 }
 
 
+
 int main(int argc, char* argv[])
 {
-	ImageAnalyser img(1);
+	ImageAnalyser img("w000-scans/00001.png");
 	img.analyse();
 	img.extract(2, 2);
 
@@ -147,3 +152,4 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
+

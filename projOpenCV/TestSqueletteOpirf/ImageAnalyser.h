@@ -19,10 +19,10 @@ class ImageAnalyser
 		int widthImage;
 
 	public:
-		ImageAnalyser(int);
+		ImageAnalyser(string imageName);
 		~ImageAnalyser();
 		void analyse();
-		void extract(int row, int column);
+		Mat extract(int row, int column);
 		string getLabel(int row);
 
 	private:
