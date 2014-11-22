@@ -2,7 +2,7 @@
 #include "ReferenceSystem.h"
 
 ImageAnalyser::ImageAnalyser(int i){
-	string imgName = "w000-scans/00021.png";
+	string imgName = "w000-scans/00003.png";
 	//string imgName = "hello.png";
 	string crossName = "cross.png";
 
@@ -22,7 +22,8 @@ ImageAnalyser::ImageAnalyser(int i){
 
 	cvtColor(cross, cross, CV_RGB2GRAY);
 
-	
+	/*string* tmp = ["accident", "bomb", "car", "casualty", "electricity", "fire", "fire_brigade", "flood", "gas", "injury", "paramedics", "person", "police", "roadblock"];
+	labels = vector<string>;*/
 
 	//threshold(img, img, 250.0, 255.0, THRESH_BINARY);
 	//threshold(cross, cross, 250.0, 255.0, THRESH_BINARY);
@@ -53,9 +54,12 @@ void ImageAnalyser::analyse(){
 
 	circle(img, crossTop, 10, 2, 10);
 
-	printPoints();
+	//printPoints();
 
 	displayMin(img, "img");
+
+
+	//getTemplate();
 }
 
 void ImageAnalyser::getTopCross()  {
@@ -86,6 +90,38 @@ void ImageAnalyser::getBottomCross()  {
 	// Adjusting with half of image size 
 	crossBottom.x += cross.cols/2;
 	crossBottom.y += 3*img.rows/4 + cross.rows/2;
+}
+
+void ImageAnalyser::getTemplate()  {
+	Mat result;
+	ReferenceSystem ref(crossBottom, crossTop);
+	double maxval;
+	string bestMatch;
+	double bestVal;
+	for (int i = 0; i < 14; i++) {
+		Mat temp = imread("templates/" + temps[i] + ".png");
+		if (temp.data == NULL){
+			cerr << "Image not found: " << temps[i] << endl;
+			exit(0);
+		}
+		cvtColor(temp, temp, CV_RGB2GRAY);
+	
+
+		Rect roi((int) (ref.getX()[1].x), (int) (ref.getY()[0].y),165,165);
+		//Point a cv::Mat header at it (no allocation is done)
+		Mat image_roi = img(roi);
+		// Extract bottom left corner
+		//Mat subMat(img, Rect(0, 3*img.rows/4, img.cols/4, img.rows/4));
+	
+		// Matching cross
+		cv::matchTemplate(image_roi, temp, result, CV_TM_CCORR_NORMED);
+		minMaxLoc(result, NULL, &maxval, NULL, NULL);
+		if(maxval > bestVal) {
+			bestVal = maxval;
+			bestMatch = temps[i];
+		}
+	}
+	cout << bestMatch << endl;
 }
 
 void ImageAnalyser::rotate() {

@@ -14,6 +14,8 @@ class ImageAnalyser
 		Mat img, cross;
 		Point crossTop, crossBottom, crossTopMax, crossBottomMax, crossTopMin, crossBottomMin;
 		static const int reduction = 3;
+		vector<string> temps;
+		vector<string> labels;
 
 	public:
 		ImageAnalyser(int);
@@ -24,6 +26,7 @@ class ImageAnalyser
 	private:
 		void getTopCross();
 		void getBottomCross();
+		void getTemplate();
 		static void displayMin(Mat, string);
 		void rotate();
 		void printPoints();

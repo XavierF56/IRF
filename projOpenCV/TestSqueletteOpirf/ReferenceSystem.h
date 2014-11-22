@@ -22,6 +22,4 @@ class ReferenceSystem
 		vector<Point> getPointsSymbols();
 		vector<Point> getY();
 		vector<Point> getX();
-
-		
 };
