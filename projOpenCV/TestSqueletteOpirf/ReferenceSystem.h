@@ -19,17 +19,14 @@ class ReferenceSystem
 		double labelPos;
 		double labelWidth;
 		double labelHeight;
+
 	public:
 		ReferenceSystem();
 		ReferenceSystem(Point, Point);
 		~ReferenceSystem();
-		vector<Point> getPoints();
-		vector<Point> getPointsSymbols();
-		vector<Point> getY();
-		vector<Point> getX();
+		vector<Rect> getImages();
 
 		Rect getLabel(int row);
 
 		int getWidthImage();
-
 };

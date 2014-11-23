@@ -5,16 +5,18 @@ ReferenceSystem::ReferenceSystem()
 
 ReferenceSystem::ReferenceSystem(Point bl, Point tr)
 {
-	widthImage = 0.088;
-
 	bottomLeft = bl;
 	topRight = tr;
 	deltaX = topRight.x - bottomLeft.x;
 	deltaY = bottomLeft.y - topRight.y;
 
-	labelPos = -1;
-	labelWidth = 0.080;
+	// labels
+	labelPos = -1.01;
+	labelWidth = 0.1;
 	labelHeight = 0.068;
+
+	// Images
+	widthImage = 0.088;
 
 	double tmpY[] = {0.091,  0.217, 0.343,  0.470,  0.595,  0.721,  0.847 };
 	listY = vector<double>(tmpY, tmpY+7);
@@ -27,37 +29,14 @@ ReferenceSystem::~ReferenceSystem(){
 
 }
 
-vector<Point> ReferenceSystem::getY() {
-	vector<Point> ret;
-
-	for(auto it = listY.begin() ; it != listY.end() ; it++)
-	{
-		ret.push_back(Point(topRight.x, topRight.y + (int) (*it*deltaY)));
-	}
-
-	return ret;
-}
-
-vector<Point> ReferenceSystem::getX() {
-	vector<Point> ret;
-
-	for(auto it = listX.begin() ; it != listX.end() ; it++)
-	{
-		ret.push_back(Point(topRight.x + (int) (*it*deltaX), topRight.y + (int) (0.091*deltaY)));
-	}
-
-	return ret;
-}
-
-
-vector<Point> ReferenceSystem::getPoints() {
-	vector<Point> ret;
+vector<Rect> ReferenceSystem::getImages() {
+	vector<Rect> ret;
 
 	for(auto ity = listY.begin() ; ity != listY.end() ; ity++)
 	{
 		for(auto itx = listX.begin() ; itx != listX.end() ; itx++)
 		{
-			ret.push_back(Point(topRight.x + (int) (*itx*deltaX), topRight.y + (int) (*ity*deltaY)));
+			ret.push_back(Rect(topRight.x + (int) (*itx*deltaX), topRight.y + (int) (*ity*deltaY), widthImage*deltaY, widthImage*deltaY));
 		}
 	}
 

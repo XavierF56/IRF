@@ -20,7 +20,7 @@ class ImageAnalyser
 		static const int columnN = 5;
 		vector<string> temps;
 		
-		vector<Point> points;
+		vector<Rect> images;
 		vector<string> labels;
 		int widthImage;
 

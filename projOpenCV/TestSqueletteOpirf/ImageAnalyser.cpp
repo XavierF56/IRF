@@ -27,10 +27,10 @@ ImageAnalyser::ImageAnalyser(string imageName){
 
 	// get points
 	ref = ReferenceSystem(crossBottom, crossTop);
-	points = ref.getPoints();
+	images = ref.getImages();
 	widthImage = ref.getWidthImage();
 
-	//this->getTemplate();
+	this->getTemplate();
 
 	
 	printPoints();
@@ -125,7 +125,6 @@ void ImageAnalyser::getTemplate()  {
 
 
 	Mat result;
-	ReferenceSystem ref(crossBottom, crossTop);
 	double maxval;
 	string bestMatch;
 	double bestVal;
@@ -136,11 +135,10 @@ void ImageAnalyser::getTemplate()  {
 			exit(0);
 		}
 		cvtColor(temp, temp, CV_RGB2GRAY);
-	
 
-		Rect roi((int) (ref.getX()[1].x), (int) (ref.getY()[0].y),165,165);
 		//Point a cv::Mat header at it (no allocation is done)
-		Mat image_roi = img(roi);
+		Mat image_roi = img(ref.getLabel(5));
+		imshow("label", image_roi);
 
 		//Mat subMat(img, Rect(0, 3*img.rows/4, img.cols/4, img.rows/4));
 
@@ -157,13 +155,12 @@ void ImageAnalyser::getTemplate()  {
 
 
 Mat ImageAnalyser::extract(int row, int column) {
-	int index = (row-1)*5 + column -1;
-	Point imagePoint = points[index];
+	int index = (row-1)*columnN + column -1;
+	Rect imageRect = images[index];
 
-	Mat image_roi = original(Rect(imagePoint.x, imagePoint.y, widthImage, widthImage));
-	imshow("name", image_roi);
-
-	return image_roi;
+	Mat ret = original(imageRect);
+	imshow("name", ret);
+	return ret;
 }
 
 
@@ -177,15 +174,14 @@ int ImageAnalyser::getWidth() {
 }
 
 void ImageAnalyser::printPoints() { // test method
-	for(auto it = points.begin() ; it != points.end() ; it++)
+	for(auto it = images.begin() ; it != images.end() ; it++)
 	{
-		circle(img, *it, 5, 10, 10);
-		cout << *it << endl;
+		rectangle(img, *it, 10, 2, 10);
 	}
 	circle(img, crossBottom, 10, 2, 10);
 	circle(img, crossTop, 10, 2, 10);
 
-	for(int j = 0 ; j < 7 ; j++)
+	for(int j = 0 ; j < rowN ; j++)
 	{
 		rectangle(img, ref.getLabel(j), 10, 2, 10);
 	}
