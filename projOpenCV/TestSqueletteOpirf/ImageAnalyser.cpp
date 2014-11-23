@@ -194,7 +194,7 @@ void ImageAnalyser::displayMin(Mat input, string name) {
 	imshow(name, res);
 }
 
-int main(int argc, char* argv[])
+int main2(int argc, char* argv[])
 {
 	ImageAnalyser img("w000-scans/00001.png");
 	img.extract(2, 2);
