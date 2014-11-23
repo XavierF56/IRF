@@ -44,7 +44,7 @@ vector<Rect> ReferenceSystem::getImages() {
 }
 
 Rect ReferenceSystem::getLabel(int row) {
-	return Rect(topRight.x + (int) (labelPos*deltaX), topRight.y + (int) (listY[row]*deltaY), labelWidth*deltaX, labelHeight*deltaY);
+	return Rect(topRight.x + (int) (labelPos*deltaX), topRight.y + (int) (listY[row]*deltaY), 250, 250);
 }
 
 
