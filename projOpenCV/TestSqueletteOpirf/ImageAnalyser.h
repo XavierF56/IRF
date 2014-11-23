@@ -26,19 +26,21 @@ class ImageAnalyser
 
 		ReferenceSystem ref;
 
+		bool correct;
+
 
 	public:
 		ImageAnalyser(string imageName);
 		~ImageAnalyser();
 		Mat extract(int row, int column);
 		string getLabel(int row);
-		int getWidth();
+		bool isCorrect();
 
 	private:
+		bool getTemplate();
 		void preprocess();
 		void getTopCross();
 		void getBottomCross();
-		void getTemplate();
 		void rotate();
 		void printPoints();
 		static void displayMin(Mat, string);

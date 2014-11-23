@@ -30,7 +30,7 @@ ImageAnalyser::ImageAnalyser(string imageName){
 	images = ref.getImages();
 	widthImage = ref.getWidthImage();
 
-	this->getTemplate();
+	correct = this->getTemplate();
 
 	
 	printPoints();
@@ -117,7 +117,7 @@ void ImageAnalyser::rotate() {
 	//cout << "Ratio : " << imgRatio << endl;
 }
 
-void ImageAnalyser::getTemplate()  {
+bool ImageAnalyser::getTemplate()  {
 	labels = vector<string>(rowN);
 
 	string tmp[] = {"accident", "bomb", "car", "casualty", "electricity", "fire", "fire_brigade", "flood", "gas", "injury", "paramedics", "person", "police", "roadblock"};
@@ -126,30 +126,44 @@ void ImageAnalyser::getTemplate()  {
 
 	Mat result;
 	double maxval;
+	double minval;
 	string bestMatch;
 	double bestVal;
-	for (int i = 0; i < 14; i++) {
-		Mat temp = imread("templates/" + temps[i] + ".png");
-		if (temp.data == NULL){
-			cerr << "Image not found: " << temps[i] << endl;
-			exit(0);
-		}
-		cvtColor(temp, temp, CV_RGB2GRAY);
 
+	for (int j=0; j < rowN; j++) {
+		bestVal = 0;
 		//Point a cv::Mat header at it (no allocation is done)
-		Mat image_roi = img(ref.getLabel(5));
+		Mat image_roi = img(ref.getLabel(j));
 		imshow("label", image_roi);
 
-		//Mat subMat(img, Rect(0, 3*img.rows/4, img.cols/4, img.rows/4));
+		for (int i = 0; i < 14; i++) {
+			Mat temp = imread("templates/" + temps[i] + ".png");
+			//imshow(temps[i], temp);
+			if (temp.data == NULL){
+				cerr << "Image not found: " << temps[i] << endl;
+				exit(0);
+			}
+			cvtColor(temp, temp, CV_RGB2GRAY);
 
-		cv::matchTemplate(image_roi, temp, result, CV_TM_CCORR_NORMED);
-		minMaxLoc(result, NULL, &maxval, NULL, NULL);
-		if(maxval > bestVal) {
-			bestVal = maxval;
-			bestMatch = temps[i];
+		
+
+			//Mat subMat(img, Rect(0, 3*img.rows/4, img.cols/4, img.rows/4));
+
+			cv::matchTemplate(image_roi, temp, result, CV_TM_CCOEFF_NORMED);
+			minMaxLoc(result, &minval, &maxval, NULL, NULL);
+			//imshow(temps[i], result);
+			//cout << temps[i] << " " << maxval << " " << minval << endl;
+			if(maxval > bestVal) {
+				bestVal = maxval;
+				bestMatch = temps[i];
+			}
 		}
+		cout << bestMatch << endl;
+		if(bestVal < 0.5) return false;
+		labels[j] = bestMatch;
 	}
-	cout << bestMatch << endl;
+	return true;
+	
 }
 
 
@@ -159,19 +173,19 @@ Mat ImageAnalyser::extract(int row, int column) {
 	Rect imageRect = images[index];
 
 	Mat ret = original(imageRect);
-	imshow("name", ret);
+	//imshow("name", ret);
 	return ret;
 }
 
 
 string ImageAnalyser::getLabel(int row) {
-	return "blabla";
 	return labels[row-1];
 }
 
-int ImageAnalyser::getWidth() {
-	return widthImage;
+bool ImageAnalyser::isCorrect() {
+	return correct;
 }
+
 
 void ImageAnalyser::printPoints() { // test method
 	for(auto it = images.begin() ; it != images.end() ; it++)
@@ -196,9 +210,9 @@ void ImageAnalyser::displayMin(Mat input, string name) {
 
 int main(int argc, char* argv[])
 {
-	ImageAnalyser img("w000-scans/00001.png");
-	img.extract(2, 2);
-
+	ImageAnalyser img("w000-scans/00022.png");
+	//img.extract(2, 2);
+	cout << img.isCorrect()<< endl;;
 	waitKey(0);
 
 	return 0;
