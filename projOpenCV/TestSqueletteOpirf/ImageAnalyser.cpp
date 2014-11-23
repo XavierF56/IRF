@@ -118,7 +118,7 @@ void ImageAnalyser::rotate() {
 }
 
 void ImageAnalyser::getTemplate()  {
-	labels = vector<string>(5);
+	labels = vector<string>(rowN);
 
 	string tmp[] = {"accident", "bomb", "car", "casualty", "electricity", "fire", "fire_brigade", "flood", "gas", "injury", "paramedics", "person", "police", "roadblock"};
 	temps = vector<string>(tmp, tmp+14);
