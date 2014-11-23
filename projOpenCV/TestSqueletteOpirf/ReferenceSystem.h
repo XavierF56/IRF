@@ -14,9 +14,11 @@ class ReferenceSystem
 		Point topRight, bottomLeft;
 		int deltaX, deltaY, xSymbol, sizeSymbol;
 		double widthImage;
-		double labelPos;
+		
 		vector<double> listX, listY, listSymbol;
-
+		double labelPos;
+		double labelWidth;
+		double labelHeight;
 	public:
 		ReferenceSystem();
 		ReferenceSystem(Point, Point);
@@ -26,7 +28,7 @@ class ReferenceSystem
 		vector<Point> getY();
 		vector<Point> getX();
 
-		Point getLabelPosition(int row);
+		Rect getLabel(int row);
 
 		int getWidthImage();
 

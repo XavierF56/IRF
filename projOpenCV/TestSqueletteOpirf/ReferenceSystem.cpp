@@ -12,22 +12,12 @@ ReferenceSystem::ReferenceSystem(Point bl, Point tr)
 	deltaX = topRight.x - bottomLeft.x;
 	deltaY = bottomLeft.y - topRight.y;
 
-	labelPos = -0.92;
+	labelPos = -1;
+	labelWidth = 0.080;
+	labelHeight = 0.068;
 
 	double tmpY[] = {0.091,  0.217, 0.343,  0.470,  0.595,  0.721,  0.847 };
-	listY = vector<double>(tmpY, tmpY+9);
-
-	//double tmpX[] = {0.025, -0.102, -0.154, -0.281, -0.333, -0.460, -0.512, -0.639, -0.691, -0.818};
-	//double tmpX[] = {-0.102,  -0.281,  -0.460,  -0.639,  -0.818};
-
-	/*double tmpX[] = {-0.92, -1}; //templates
-	listX = vector<double>(tmpX, tmpX+2);
-	cout << tmpX[0] << endl;*/
-
-	//Rect roi(topRight.x + (int) (tmpX[1]*deltaX),topRight.y + (int) (tmp[0]*deltaY),165,165);
-	//Point a cv::Mat header at it (no allocation is done)
-	//Mat image_roi = img(roi);
-	//imshow("name", image_roi);
+	listY = vector<double>(tmpY, tmpY+7);
 
 	double tmpX[] = {-0.818, -0.639,-0.460,  -0.281, -0.102};
 	listX = vector<double>(tmpX, tmpX+5);
@@ -74,8 +64,8 @@ vector<Point> ReferenceSystem::getPoints() {
 	return ret;
 }
 
-Point ReferenceSystem::getLabelPosition(int row) {
-	return Point(topRight.x + (int) (labelPos*deltaX), topRight.y + (int) (listY[row]*deltaY));
+Rect ReferenceSystem::getLabel(int row) {
+	return Rect(topRight.x + (int) (labelPos*deltaX), topRight.y + (int) (listY[row]*deltaY), labelWidth*deltaX, labelHeight*deltaY);
 }
 
 

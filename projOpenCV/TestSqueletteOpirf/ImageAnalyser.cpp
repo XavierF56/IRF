@@ -187,7 +187,7 @@ void ImageAnalyser::printPoints() { // test method
 
 	for(int j = 0 ; j < 7 ; j++)
 	{
-		//circle(img, j, 5, 10, 10);
+		rectangle(img, ref.getLabel(j), 10, 2, 10);
 	}
 }
 
