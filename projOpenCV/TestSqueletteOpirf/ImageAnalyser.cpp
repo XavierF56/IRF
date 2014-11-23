@@ -33,8 +33,8 @@ ImageAnalyser::ImageAnalyser(string imageName){
 	correct = this->getTemplate();
 
 	
-	printPoints();
-	displayMin(img, "img");
+	//printPoints();
+	//displayMin(img, "img");
 }
 
 ImageAnalyser::~ImageAnalyser(){
@@ -134,7 +134,7 @@ bool ImageAnalyser::getTemplate()  {
 		bestVal = 0;
 		//Point a cv::Mat header at it (no allocation is done)
 		Mat image_roi = img(ref.getLabel(j));
-		imshow("label", image_roi);
+		//imshow("label", image_roi);
 
 		for (int i = 0; i < 14; i++) {
 			Mat temp = imread("templates/" + temps[i] + ".png");
@@ -158,7 +158,7 @@ bool ImageAnalyser::getTemplate()  {
 				bestMatch = temps[i];
 			}
 		}
-		cout << bestMatch << endl;
+		// cout << bestMatch << endl;
 		if(bestVal < 0.5) return false;
 		labels[j] = bestMatch;
 	}
