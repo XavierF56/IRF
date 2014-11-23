@@ -18,8 +18,7 @@ ImagesExtractor::ImagesExtractor(int i)
 			ss2 << std::setfill('0') << std::setw (2) << j;
 			ss2 >> page;
 			form = scripter + page;
-			ImageAnalyser imgAn("w" + scripter + "-scans/" + form + ".png");			
-			imgAn.analyse();
+			ImageAnalyser imgAn("w" + scripter + "-scans/" + form + ".png");	
 			for( int row = 1; row <= 7; row ++)
 			{
 				string label(imgAn.getLabel(row));
@@ -42,7 +41,7 @@ ImagesExtractor::~ImagesExtractor()
 }
 
 
-int main(int argc, char* argv[])
+int main2(int argc, char* argv[])
 {
 	ImagesExtractor imgE(0);
 }

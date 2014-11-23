@@ -1,5 +1,5 @@
 #include "ImageAnalyser.h"
-#include "ReferenceSystem.h"
+
 
 
 ImageAnalyser::ImageAnalyser(string imageName){
@@ -20,53 +20,36 @@ ImageAnalyser::ImageAnalyser(string imageName){
 		cerr << "Image not found: " << crossName << endl;
 		exit(0);
 	}
-
 	cvtColor(cross, cross, CV_RGB2GRAY);
 
+	
+	this->preprocess();
 
-	/*string* tmp = ["accident", "bomb", "car", "casualty", "electricity", "fire", "fire_brigade", "flood", "gas", "injury", "paramedics", "person", "police", "roadblock"];
-	labels = vector<string>;*/
+	// get points
+	ref = ReferenceSystem(crossBottom, crossTop);
+	points = ref.getPoints();
+	widthImage = ref.getWidthImage();
 
-	//threshold(img, img, 250.0, 255.0, THRESH_BINARY);
-	//threshold(cross, cross, 250.0, 255.0, THRESH_BINARY);
+	//this->getTemplate();
 
-	labels = vector<string>(5);
-	labels.push_back("hello");
+	
+	printPoints();
+	displayMin(img, "img");
 }
 
 ImageAnalyser::~ImageAnalyser(){
 
 }
 
-void ImageAnalyser::displayMin(Mat input, string name) {
-	Size tailleReduite(input.cols / reduction, input.rows / reduction);
-	Mat res = Mat(tailleReduite, CV_8UC3); //cree une image à 3 canaux de profondeur 8 bits chacuns
-	resize(input, res, tailleReduite);
-	imshow(name, res);
 
 
-}
-
-void ImageAnalyser::analyse(){
+void ImageAnalyser::preprocess(){
+	// transforme image
 	this->getTopCross();
 	this->getBottomCross();
 	this->rotate();
 	
-
-	circle(img, crossBottom, 10, 2, 10);
-	circle(img, crossTop, 10, 2, 10);
-
-
-	ReferenceSystem ref(crossBottom, crossTop);
-	points = ref.getPoints();
-	widthImage = ref.getWidthImage();
-
-	printPoints();
 	
-	displayMin(img, "img");
-
-
-	//getTemplate();
 }
 
 void ImageAnalyser::getTopCross()  {
@@ -99,7 +82,48 @@ void ImageAnalyser::getBottomCross()  {
 	crossBottom.y += 3*img.rows/4 + cross.rows/2;
 }
 
+
+
+void ImageAnalyser::rotate() {
+	// calculate image ratio, the correct should be sqrt(2.0)
+	double goodRatio = sqrt(2.0);
+	double imgRatio = ((double)crossBottom.y - (double)crossTop.y)/((double)crossTop.x - (double)crossBottom.x);
+
+	// calculate angles from ratio
+	double goodAngle = atan(goodRatio) * 180 / PI;
+	double imgAngle = atan(imgRatio) * 180 / PI;
+	double correctionAngle = goodAngle - imgAngle;
+
+	//cout << "Ratio : " << imgRatio << endl << "good : " << goodAngle << endl << "bad : " << imgAngle << endl;
+	//cout << "Top : " <<  crossTop << endl << "Bottom : " << crossBottom << endl;
+
+	// create transformation
+    cv::Mat r = cv::getRotationMatrix2D(crossBottom, correctionAngle, 1);
+	Mat dst;
+
+	// apply transformation on greyscaled image
+    cv::warpAffine(img, dst, r, cv::Size(img.cols, img.rows));
+	img = dst;
+
+	// apply transformation on original image
+	cv::warpAffine(original, dst, r, cv::Size(img.cols, img.rows));
+	original = dst;
+
+	// Racalculate topCross after rotation
+	this->getTopCross();
+
+
+	//imgRatio = ((double)crossBottom.y - (double)crossTop.y)/((double)crossTop.x - (double)crossBottom.x);
+	//cout << "Ratio : " << imgRatio << endl;
+}
+
 void ImageAnalyser::getTemplate()  {
+	labels = vector<string>(5);
+
+	string tmp[] = {"accident", "bomb", "car", "casualty", "electricity", "fire", "fire_brigade", "flood", "gas", "injury", "paramedics", "person", "police", "roadblock"};
+	temps = vector<string>(tmp, tmp+14);
+
+
 	Mat result;
 	ReferenceSystem ref(crossBottom, crossTop);
 	double maxval;
@@ -117,10 +141,9 @@ void ImageAnalyser::getTemplate()  {
 		Rect roi((int) (ref.getX()[1].x), (int) (ref.getY()[0].y),165,165);
 		//Point a cv::Mat header at it (no allocation is done)
 		Mat image_roi = img(roi);
-		// Extract bottom left corner
+
 		//Mat subMat(img, Rect(0, 3*img.rows/4, img.cols/4, img.rows/4));
-	
-		// Matching cross
+
 		cv::matchTemplate(image_roi, temp, result, CV_TM_CCORR_NORMED);
 		minMaxLoc(result, NULL, &maxval, NULL, NULL);
 		if(maxval > bestVal) {
@@ -131,43 +154,7 @@ void ImageAnalyser::getTemplate()  {
 	cout << bestMatch << endl;
 }
 
-void ImageAnalyser::rotate() {
-	// calculating ratio, a corretc image should have sqrt(2.0)
-	double goodRatio = sqrt(2.0);
-	double imgRatio = ((double)crossBottom.y - (double)crossTop.y)/((double)crossTop.x - (double)crossBottom.x);
 
-	double goodAngle = atan(goodRatio) * 180 / PI;
-	double imgAngle = atan(imgRatio) * 180 / PI;
-
-	//cout << "Ratio : " << imgRatio << endl << "good : " << goodAngle << endl << "bad : " << imgAngle << endl;
-	//cout << "Top : " <<  crossTop << endl << "Bottom : " << crossBottom << endl;
-
-    cv::Mat r = cv::getRotationMatrix2D(crossBottom, goodAngle-imgAngle, 1);
-	Mat dst;
-
-	// Rotating greyscaled image
-    cv::warpAffine(img, dst, r, cv::Size(img.cols, img.rows));
-	img = dst;
-
-	// Rotating original image
-	cv::warpAffine(original, dst, r, cv::Size(img.cols, img.rows));
-	original = dst;
-
-	// Racalculate topCross after rotation
-	this->getTopCross();
-
-
-	//imgRatio = ((double)crossBottom.y - (double)crossTop.y)/((double)crossTop.x - (double)crossBottom.x);
-	//cout << "Ratio : " << imgRatio << endl;
-}
-
-void ImageAnalyser::printPoints() {
-	for(auto it = points.begin() ; it != points.end() ; it++)
-	{
-		circle(img, *it, 5, 10, 10);
-		cout << *it << endl;
-	}
-}
 
 Mat ImageAnalyser::extract(int row, int column) {
 	int index = (row-1)*5 + column -1;
@@ -185,12 +172,35 @@ string ImageAnalyser::getLabel(int row) {
 	return labels[row-1];
 }
 
+int ImageAnalyser::getWidth() {
+	return widthImage;
+}
 
+void ImageAnalyser::printPoints() { // test method
+	for(auto it = points.begin() ; it != points.end() ; it++)
+	{
+		circle(img, *it, 5, 10, 10);
+		cout << *it << endl;
+	}
+	circle(img, crossBottom, 10, 2, 10);
+	circle(img, crossTop, 10, 2, 10);
 
-int main2(int argc, char* argv[])
+	for(int j = 0 ; j < 7 ; j++)
+	{
+		//circle(img, j, 5, 10, 10);
+	}
+}
+
+void ImageAnalyser::displayMin(Mat input, string name) {
+	Size tailleReduite(input.cols / reduction, input.rows / reduction);
+	Mat res = Mat(tailleReduite, CV_8UC3); //cree une image à 3 canaux de profondeur 8 bits chacuns
+	resize(input, res, tailleReduite);
+	imshow(name, res);
+}
+
+int main(int argc, char* argv[])
 {
 	ImageAnalyser img("w000-scans/00001.png");
-	img.analyse();
 	img.extract(2, 2);
 
 	waitKey(0);
