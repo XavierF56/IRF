@@ -35,20 +35,22 @@ void FeaturesExtractor::listFile() {
 
 void FeaturesExtractor::readImage(string name) {
 	cout << name << endl;
-
+	calculateMoments(name);
 	
 }
 
 /// Function header
 void thresh_callback(int, void* );
 
-void FeaturesExtractor::calculateMoments(string name) {
-	Mat src; Mat src_gray;
-int thresh = 100;
-int max_thresh = 255;
-RNG rng(12345);
+Mat src; Mat src_gray;
+	int thresh = 100;
+	int max_thresh = 255;
+	RNG rng(12345);
 
-		Mat src = imread(name);
+void FeaturesExtractor::calculateMoments(string name) {
+	
+
+	 src = imread(name);
 	/// Convert image to gray and blur it
   cvtColor( src, src_gray, CV_BGR2GRAY );
   blur( src_gray, src_gray, Size(3,3) );
@@ -61,10 +63,9 @@ RNG rng(12345);
   createTrackbar( " Canny thresh:", "Source", &thresh, max_thresh, thresh_callback );
   thresh_callback( 0, 0 );
   /** @function thresh_callback */
+}
 
-
-void thresh_callback(int, void* )
-{
+void thresh_callback(int, void* ) {
   Mat canny_output;
   vector<vector<Point> > contours;
   vector<Vec4i> hierarchy;
