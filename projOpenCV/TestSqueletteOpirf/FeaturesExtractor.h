@@ -23,4 +23,5 @@ class FeaturesExtractor
 
 	private:
 		void readImage(string name);
+		void calculateMoments(string);
 };
