@@ -1,0 +1,16 @@
+Ratio height/width
+
+Pixel density (#black/#white)
+
+# circles + distance from center of image
+# corners
+# groupes de pixels
+
+
+
+Irregularity (or Dispersion)
+# straight lines
+
+Transformations de Fourier
+Moments
+Histogramme

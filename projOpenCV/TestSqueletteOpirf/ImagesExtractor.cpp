@@ -54,7 +54,7 @@ ImagesExtractor::~ImagesExtractor()
 }
 
 
-int main(int argc, char* argv[])
+int main3(int argc, char* argv[])
 {
 	ImagesExtractor imgE(0);
 }
