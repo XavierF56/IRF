@@ -2,7 +2,7 @@
 
 
 
-int main(){
+int main2(){
 	FeaturesExtractor ext("Accident/");
     ext.listFile();
 	cout << "Accident : " << ext.getAvg() << " +/- " << ext.getDeviation() << " %" << ext.getDeviation() /ext.getAvg() << endl;

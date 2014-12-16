@@ -49,7 +49,7 @@ void ArffCreator::closeArffFile()
 	fichier.close();
 }
 
-int main(){
+int main3(){
 	ArffCreator ac("test");
     
 	list<pair<string, string>> l;
