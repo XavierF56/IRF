@@ -1,7 +1,7 @@
 #include "FeaturesExtractor.h"
 
 
-int main(){
+int main2(){
 	FeaturesExtractor ext("Source/");
     ext.listFile();
 
