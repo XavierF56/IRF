@@ -16,10 +16,16 @@ class FeaturesExtractor
 {
 	private:
 		string source;
+		vector<double> list;
+
 
 	public:
 		void listFile();
 		FeaturesExtractor(string);
+		void find_moments( Mat& gray );
+
+		double getDeviation();
+		double getAvg();
 
 	private:
 		void readImage(string name);
