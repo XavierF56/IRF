@@ -20,8 +20,11 @@ class FeaturesExtractor
 
 
 	public:
-		void listFile();
+		void extract();
+
 		FeaturesExtractor(string);
+
+
 		void find_moments( Mat& gray );
 
 		double getDeviation();
@@ -30,4 +33,5 @@ class FeaturesExtractor
 	private:
 		void readImage(string name);
 		void calculateMoments(string);
+		Rect find_boundingBox(Mat img);
 };
