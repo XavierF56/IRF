@@ -78,7 +78,7 @@ list<string> FeaturesExtractor::readImage(string name) {
 	int pixelsRatio = 1;
 
 	// Extraction de la classe via le nom
-	string classe = name;
+	string classe = extractClass(name);
 
 	data.push_back(std::to_string((long double)(barycenter.x)));
 	data.push_back(std::to_string((long double)(barycenter.y)));	
@@ -88,7 +88,15 @@ list<string> FeaturesExtractor::readImage(string name) {
 
 	return data;
 }
+string FeaturesExtractor::extractClass(string name)
+{
+	const std::string s = name;
+    std::regex rgx(".*/([a-z]+).*");
+    std::smatch match;
 
+    if (std::regex_search(s.begin(), s.end(), match, rgx))
+        return match[1];
+}
 Rect FeaturesExtractor::find_boundingBox(Mat src)
 {
 	// double for on mat

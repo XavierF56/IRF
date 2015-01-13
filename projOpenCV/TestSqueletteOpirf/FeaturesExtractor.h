@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <list>
+#include <regex>
 #include"dirent.h"
 #include <windows.h>
 #include "opencv2/imgproc/imgproc.hpp"
@@ -31,6 +32,7 @@ class FeaturesExtractor
 		double getAvg();
 
 	private:
+		string extractClass(string name);
 		list<string> readImage(string name);
 		void calculateMoments(string);
 		Rect find_boundingBox(Mat img);
