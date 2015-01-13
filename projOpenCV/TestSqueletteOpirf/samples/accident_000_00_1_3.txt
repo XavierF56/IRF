@@ -1,0 +1,7 @@
+label accident
+form 00000
+scripter 000
+page 00
+row 1
+column 3
+size
