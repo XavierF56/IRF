@@ -45,12 +45,20 @@ void FeaturesExtractor::readImage(string name) {
 	cvtColor( src, src, CV_BGR2GRAY);
 
 	medianBlur(src, src, 5);
-	Rect bou = this->find_boundingBox(src);
-	rectangle(src, bou,  Scalar(0,255,0),1, 8,0);
+	//Rect bou = this->find_boundingBox(src);
+	//rectangle(src, bou,  Scalar(0,255,0),1, 8,0);
 
+	//imshow(name, src);
+
+	//find_moments(src);
+
+	Point CoG = find_CoG(src);
+	Point half;
+	half.x = src.cols/2;
+	half.y = src.rows/2;
+	circle(src, half, 5, Scalar( 200, 200, 200 ), 1, 8, 0);
+	circle(src, CoG, 10, Scalar( 100, 100, 100 ), 1, 8, 0);
 	imshow(name, src);
-
-	find_moments(src);
 }
 
 Rect FeaturesExtractor::find_boundingBox(Mat src)
@@ -101,6 +109,7 @@ void find_moments( Mat& gray );
 
 RNG rng(12345);
 
+
 void FeaturesExtractor::find_moments(Mat& gray)
 {
     Mat canny_output;
@@ -113,5 +122,29 @@ void FeaturesExtractor::find_moments(Mat& gray)
     //findContours(canny_output, contours, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 	Moments mom = moments( canny_output, true );
 	list.push_back(mom.m00);
+}
+
+Point FeaturesExtractor::find_CoG(Mat& picture)
+{
+	
+	// http://opencvexamples.blogspot.com/2013/10/calculating-moments-of-image.html#.VLU9tmNZjvw
+	Mat binary;
+	Point center;
+	threshold(picture, binary, 200, 255, THRESH_BINARY);
+
+	double m00, m10, m01;
+	CvMoments moment = moments(binary, 1);
+	m00 = moment.m00;
+	if (m00 == 0) {
+		return center;
+	}
+	m10 = moment.m10;
+	m01 = moment.m01;
+	center.x = (int) (m10/m00);
+	center.y = (int) (m01/m00); 
+	
+	cout << "2x: " << center.x << " y: " << center.y << endl;
+
+	return center;
 }
 

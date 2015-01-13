@@ -26,6 +26,7 @@ class FeaturesExtractor
 
 
 		void find_moments( Mat& gray );
+		Point find_CoG(Mat& picture);
 
 		double getDeviation();
 		double getAvg();
