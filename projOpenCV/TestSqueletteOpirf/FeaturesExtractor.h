@@ -8,6 +8,7 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/core/core.hpp"
+#include <list>
 
 using namespace std;
 using namespace cv;
@@ -34,4 +35,6 @@ class FeaturesExtractor
 		void readImage(string name);
 		void calculateMoments(string);
 		Rect find_boundingBox(Mat img);
+
+		list<Rect> getRectDiv(Mat);
 };
