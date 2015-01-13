@@ -1,14 +1,15 @@
-#include<stdio.h>
-#include<cstdlib>
-#include<iostream>
+#include <stdio.h>
+#include <cstdlib>
+#include <iostream>
+#include <fstream>
 #include <string>
-#include<fstream>
+#include <list>
 #include"dirent.h"
 #include <windows.h>
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/core/core.hpp"
-#include <list>
+
 
 using namespace std;
 using namespace cv;
@@ -17,8 +18,6 @@ class FeaturesExtractor
 {
 	private:
 		string source;
-		vector<double> list;
-
 
 	public:
 		void extract();
@@ -32,9 +31,12 @@ class FeaturesExtractor
 		double getAvg();
 
 	private:
-		void readImage(string name);
+		list<string> readImage(string name);
 		void calculateMoments(string);
 		Rect find_boundingBox(Mat img);
+
+		double getRatioBB(Mat);
+		double getRatioColor(Mat);
 
 		list<Rect> getRectDiv(Mat);
 };

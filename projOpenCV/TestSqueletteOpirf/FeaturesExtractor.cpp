@@ -1,4 +1,5 @@
 #include "FeaturesExtractor.h"
+#include "ArffCreator.h"
 
 
 
@@ -13,13 +14,28 @@ int main(){
 
 FeaturesExtractor::FeaturesExtractor(string source) {
 	this->source = source;
-	list = vector<double>();
 }
 
 void FeaturesExtractor::extract() {
 	DIR *pDIR;
 	string ext = ".png";
 
+	// Cration du ArffCreator
+	ArffCreator ac("test");
+	list<list<string>> data;
+	list<pair<string, string>> features;	
+	
+	// Ecriture du Header du fichier Arff
+	features.push_back(list<pair<string, string>>::value_type("BBBarycenterX", "NUMERIC"));
+	features.push_back(list<pair<string, string>>::value_type("BBBarycenteY", "NUMERIC"));
+	features.push_back(list<pair<string, string>>::value_type("BBRatio", "NUMERIC"));
+	features.push_back(list<pair<string, string>>::value_type("PixelsRatio", "NUMERIC"));	
+	features.push_back(list<pair<string, string>>::value_type("class", "{accident,bomb,car,casualty,electricity,fire,fire_brigade,flood,gas,injury,paramedics,person,police,roadblock}"));
+
+	ac.writeHeader("Features", features);
+
+
+	// Recolte des données
 	struct dirent *entry;
 	if (pDIR=opendir(this->source.c_str())) {
 		while(entry = readdir(pDIR)){
@@ -28,41 +44,82 @@ void FeaturesExtractor::extract() {
 
 				// contains ext .png
 				if (imageName.find(ext) != string::npos) {
-					readImage(this->source + imageName);
+					data.push_back(readImage(this->source + imageName));
 				} 
 			}
 		}
 		closedir(pDIR);
 	}
+	
+	// Ecriture des donnees dans le fichier Arff
+	ac.writeData(data);
 }
 
-void FeaturesExtractor::readImage(string name) {
+list<string> FeaturesExtractor::readImage(string name) {	
+	cout << name << endl;
+	int thresh = 100;
 	Mat src = imread(name);
 
 	// Preprocessing
 	cvtColor( src, src, CV_BGR2GRAY);
 	medianBlur(src, src, 5);
+
+	// does not work
 	Rect bb = this->find_boundingBox(src);
 
 	//rectangle(src, bb,  Scalar(0,255,0),1, 8,0);
 	src = src(bb);
+	imshow(name, src);
+
 
 	// From main image
 
-	// dividing in sub image
-	int colM = src.cols / 2
 
-	imshow(name, src);
 
-	//find_moments(src);
+	list<string> data;
+
+	// Calcul du barycentre
+	Point barycenter(0,0);
+
+	// Calcul du ratio BB
+	double BBRatio = getRatioBB(src);
+	cout << BBRatio << endl;
+
+
+	// Calcul du ratio blacks pixels / total pixels
+	int pixelsRatio = getRatioColor(src);
+	cout << pixelsRatio << endl;
+
+
+	// Extraction de la classe via le nom
+	string classe = name;
+
+	data.push_back(std::to_string((long double)(barycenter.x)));
+	data.push_back(std::to_string((long double)(barycenter.y)));	
+	data.push_back(std::to_string((long double)(BBRatio)));
+	data.push_back(std::to_string((long double)(pixelsRatio)));
+	data.push_back(classe);
+
+
+	return data;
 }
 
 
 list<Rect> FeaturesExtractor::getRectDiv(Mat) {
 	list<Rect> res;
-
-
 }
+
+
+double FeaturesExtractor::getRatioBB(Mat src) {
+	return src.cols / src.rows;
+}
+double FeaturesExtractor::getRatioColor(Mat src) {
+	//threshold(src, src, 230, 255, CV_THRESH_BINARY);
+	//imshow("name", src);
+	//cout << countNonZero(src) << endl;
+	return countNonZero(src) / src.rows*src.cols;
+}
+
 
 
 Rect FeaturesExtractor::find_boundingBox(Mat src)
@@ -133,6 +190,5 @@ void FeaturesExtractor::find_moments(Mat& gray)
     /// Find contours
     //findContours(canny_output, contours, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 	Moments mom = moments( canny_output, true );
-	list.push_back(mom.m00);
 }
 
