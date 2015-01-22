@@ -18,7 +18,14 @@ using namespace cv;
 class FeaturesExtractor
 {
 	private:
-		string source;
+		Mat originalImg;
+		Mat greyscaleImg;
+		Mat binaryImg;
+
+		Mat originalBox;
+		Mat greyscaleBox;
+		Mat binaryBox;
+		string name;
 
 	public:
 		void extract();
@@ -26,20 +33,18 @@ class FeaturesExtractor
 		FeaturesExtractor(string);
 
 
-		void find_moments( Mat& gray );
-		Point find_CoG(Mat& picture);
+		
 
-		double getDeviation();
-		double getAvg();
-
-	private:
-		string extractClass(string name);
-		list<string> readImage(string name);
-		void calculateMoments(string);
-		Rect find_boundingBox(Mat img);
-
+		Point getCoG();
 		double getRatioBB(Mat);
 		double getRatioColor(Mat);
-
+		string getClass();
 		list<Rect> getRectDiv(Mat);
+	private:
+		void calculateMoments(string);
+		Rect find_boundingBox();
+		void find_moments( Mat& gray );
+		
+
+		
 };
