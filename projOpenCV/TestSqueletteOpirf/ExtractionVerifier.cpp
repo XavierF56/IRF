@@ -1,11 +1,13 @@
 #include "ExtractionVerifier.h"
 
+
 int main()
 {
-	ExtractionVerifier ver("Verif\\ResultsExtraction\\");
+	ExtractionVerifier ver("Verif\\Result\\");
 	ver.verifyAll("Verif\\ToCheck\\");
 
 }
+
 
 ExtractionVerifier::ExtractionVerifier(string source)
 {
