@@ -79,9 +79,8 @@ void ArffCreator::extract() {
 				if (imageName.find(ext) != string::npos) {
 					FeaturesExtractor tmp(this->folder + imageName);
 					list<string> datum;
-					Point pt = tmp.getCoG();
-					datum.push_back(std::to_string((long double)(pt.x)));
-					datum.push_back(std::to_string((long double)(pt.y)));	
+					datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGX())));
+					datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGY())));	
 					datum.push_back(std::to_string((long double)(tmp.getRatioBB())));
 					datum.push_back(std::to_string((long double)(tmp.getRatioColor())));
 					datum.push_back(tmp.getClass());
@@ -100,4 +99,6 @@ void ArffCreator::extract() {
 int main(){
 	ArffCreator ac("test2", "samples/");
 	ac.extract();
+	waitKey(0);
+	Sleep(100000);
 }
