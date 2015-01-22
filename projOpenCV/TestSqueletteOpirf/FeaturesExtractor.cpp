@@ -1,9 +1,6 @@
 #include "FeaturesExtractor.h"
-#include "ArffCreator.h"
 
-
-
-int main(){
+int main2(){
 	//FeaturesExtractor ext("samples/accident_000_00_1_1.png");
 	// Recolte des données
 	struct dirent *entry;
@@ -111,100 +108,7 @@ Rect FeaturesExtractor::find_boundingBox() {
 
 	return cv::Rect(leftX, topY, (rightX-leftX), (bottomY-topY));
 }
-/*
-void FeaturesExtractor::extract() {
-	DIR *pDIR;
-	string ext = ".png";
 
-	// Cration du ArffCreator
-	ArffCreator ac("test");
-	list<list<string>> data;
-	list<pair<string, string>> features;	
-	
-	// Ecriture du Header du fichier Arff
-	features.push_back(list<pair<string, string>>::value_type("BBBarycenterX", "NUMERIC"));
-	features.push_back(list<pair<string, string>>::value_type("BBBarycenteY", "NUMERIC"));
-	features.push_back(list<pair<string, string>>::value_type("BBRatio", "NUMERIC"));
-	features.push_back(list<pair<string, string>>::value_type("PixelsRatio", "NUMERIC"));	
-	features.push_back(list<pair<string, string>>::value_type("class", "{accident,bomb,car,casualty,electricity,fire,fire_brigade,flood,gas,injury,paramedics,person,police,roadblock}"));
-
-	ac.writeHeader("Features", features);
-
-
-	// Recolte des données
-	struct dirent *entry;
-	if (pDIR=opendir(this->source.c_str())) {
-		while(entry = readdir(pDIR)){
-			if(strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
-				string imageName = entry->d_name;
-
-				// contains ext .png
-				if (imageName.find(ext) != string::npos) {
-					data.push_back(readImage(this->source + imageName));
-				} 
-			}
-		}
-		closedir(pDIR);
-	}
-	
-	// Ecriture des donnees dans le fichier Arff
-	ac.writeData(data);
-}
-*/
-/*
-list<string> FeaturesExtractor::readImage(string name) {
-
-
-
-	/*Point CoG = find_CoG(src);
-	Point half;
-	half.x = src.cols/2;
-	half.y = src.rows/2;
-	circle(src, half, 5, Scalar( 200, 200, 200 ), 1, 8, 0);
-	circle(src, CoG, 10, Scalar( 100, 100, 100 ), 1, 8, 0);
-	imshow(name, src);*/
-
-	// does not work
-	/*Rect bb = this->find_boundingBox(src);
-
-	//rectangle(src, bb,  Scalar(0,255,0),1, 8,0);
-	src = src(bb);
-	imshow(name, src);
-
-
-	// From main image
-
-
-
-	list<string> data;
-
-	// Calcul du barycentre
-	Point barycenter(0,0);
-
-	// Calcul du ratio BB
-	double BBRatio = getRatioBB(src);
-	cout << BBRatio << endl;
-
-
-	// Calcul du ratio blacks pixels / total pixels
-	int pixelsRatio = getRatioColor(src);
-	cout << pixelsRatio << endl;
-
-
-	// Extraction de la classe via le nom
-	string classe = extractClass(name);
-
-	data.push_back(std::to_string((long double)(barycenter.x)));
-	data.push_back(std::to_string((long double)(barycenter.y)));	
-	data.push_back(std::to_string((long double)(BBRatio)));
-	data.push_back(std::to_string((long double)(pixelsRatio)));
-	data.push_back(classe);
-
-
-	return data;
-}
-
-*/
 
 string FeaturesExtractor::getClass()
 {
@@ -222,37 +126,26 @@ list<Rect> FeaturesExtractor::getRectDiv(Mat) {
 }
 
 
-double FeaturesExtractor::getRatioBB(Mat src) {
-	return src.cols / src.rows;
+double FeaturesExtractor::getRatioBB() {
+	return originalBox.cols / originalBox.rows;
 }
 
-double FeaturesExtractor::getRatioColor(Mat src) {
-	//threshold(src, src, 230, 255, CV_THRESH_BINARY);
-	//imshow("name", src);
-	//cout << countNonZero(src) << endl;
-	return countNonZero(src) / src.rows*src.cols;
+double FeaturesExtractor::getRatioColor() {
+	return countNonZero(binaryBox) / binaryBox.rows*binaryBox.cols;
 }
 
 
-Point FeaturesExtractor::getCoG()
-{
-	
-	// http://opencvexamples.blogspot.com/2013/10/calculating-moments-of-image.html#.VLU9tmNZjvw
+Point FeaturesExtractor::getCoG() {
 	Point center;
+	Moments m = moments(binaryBox, false);
 
-
-	double m00, m10, m01;
-	CvMoments moment = moments(binaryImg, 1);
-	m00 = moment.m00;
-	if (m00 == 0) {
+	if (m.m00 == 0)
 		return center;
-	}
-	m10 = moment.m10;
-	m01 = moment.m01;
-	center.x = (int) (m10/m00);
-	center.y = (int) (m01/m00); 
-	
-	cout << "2x: " << center.x << " y: " << center.y << endl;
+
+	center.x =  (int)(m.m10/m.m00);
+	center.y = (int)(m.m01/m.m00); 
+
+	cout << "2x: " << ((double)(m.m10/m.m00)) / (double)binaryBox.cols << " y: " << ((double)(m.m01/m.m00)) / (double)binaryBox.rows << endl;
 
 	return center;
 }
