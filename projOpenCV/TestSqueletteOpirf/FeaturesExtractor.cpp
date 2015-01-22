@@ -3,6 +3,7 @@
 
 
 
+/*
 int main(){
 	FeaturesExtractor ext("samples/");
     ext.extract();
@@ -11,6 +12,7 @@ int main(){
 	Sleep(100000);
 	return 0;
 }
+*/
 
 FeaturesExtractor::FeaturesExtractor(string source) {
 	this->source = source;
