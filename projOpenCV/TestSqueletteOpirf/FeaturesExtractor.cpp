@@ -1,5 +1,6 @@
 #include "FeaturesExtractor.h"
 
+
 int main2(){
 	//FeaturesExtractor ext("samples/accident_000_00_1_1.png");
 	// Recolte des données
