@@ -1,8 +1,9 @@
 #include "ArffCreator.h"
 
-ArffCreator::ArffCreator(string filename)
+ArffCreator::ArffCreator(string filename, string folder)
 {
 	openArffFile(filename + ".arff");
+	this->folder = folder;
 }
 
 ArffCreator::~ArffCreator()
@@ -49,42 +50,54 @@ void ArffCreator::closeArffFile()
 	fichier.close();
 }
 
-int main3(){
-	ArffCreator ac("test");
-    
-	list<pair<string, string>> l;
-	l.push_back(list<pair<string, string>>::value_type("sepallength", "NUMERIC"));
-	l.push_back(list<pair<string, string>>::value_type("sepalwidth", "NUMERIC"));
-	l.push_back(list<pair<string, string>>::value_type("petallength", "NUMERIC"));
-	l.push_back(list<pair<string, string>>::value_type("petalwidth", "NUMERIC"));
-	l.push_back(list<pair<string, string>>::value_type("class", "{Iris-setosa,Iris-versicolor,Iris-virginica}"));
+void ArffCreator::extract() {
+	DIR *pDIR;
+	string ext = ".png";
 
-	ac.writeHeader("iris", l);
+	// Cration du ArffCreator
+	list<list<string>> data;
+	list<pair<string, string>> features;	
+	
+	// Ecriture du Header du fichier Arff
+	features.push_back(list<pair<string, string>>::value_type("BBBarycenterX", "NUMERIC"));
+	features.push_back(list<pair<string, string>>::value_type("BBBarycenteY", "NUMERIC"));
+	features.push_back(list<pair<string, string>>::value_type("BBRatio", "NUMERIC"));
+	features.push_back(list<pair<string, string>>::value_type("PixelsRatio", "NUMERIC"));	
+	features.push_back(list<pair<string, string>>::value_type("class", "{accident,bomb,car,casualty,electricity,fire,fire_brigade,flood,gas,injury,paramedics,person,police,roadblock}"));
 
-	list<list<string>> ll;
-	list<string> l1, l2, l3;
+	writeHeader("Features", features);
 
-	l1.push_back("5.1");
-	l1.push_back("3.5");
-	l1.push_back("1.4");
-	l1.push_back("0.2");
-	l1.push_back("Iris-setosa");
 
-	l2.push_back("4.9");
-	l2.push_back("3.0");
-	l2.push_back("1.4");
-	l2.push_back("0.2");
-	l2.push_back("Iris-setosa");
+	// Recolte des données
+	struct dirent *entry;
+	if (pDIR=opendir(this->folder.c_str())) {
+		while(entry = readdir(pDIR)){
+			if(strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
+				string imageName = entry->d_name;
 
-	l3.push_back("4.7");
-	l3.push_back("3.2");
-	l3.push_back("1.3");
-	l3.push_back("0.2");
-	l3.push_back("Iris-setosa");
+				// contains ext .png
+				if (imageName.find(ext) != string::npos) {
+					FeaturesExtractor tmp(this->folder + imageName);
+					list<string> datum;
+					Point pt = tmp.getCoG();
+					datum.push_back(std::to_string((long double)(pt.x)));
+					datum.push_back(std::to_string((long double)(pt.y)));	
+					datum.push_back(std::to_string((long double)(tmp.getRatioBB())));
+					datum.push_back(std::to_string((long double)(tmp.getRatioColor())));
+					datum.push_back(tmp.getClass());
 
-	ll.push_back(l1);
-	ll.push_back(l2);
-	ll.push_back(l3);
+					data.push_back(datum);
+				} 
+			}
+		}
+		closedir(pDIR);
+	}
+	
+	// Ecriture des donnees dans le fichier Arff
+	writeData(data);
+}
 
-	ac.writeData(ll);
+int main(){
+	ArffCreator ac("test2", "samples/");
+	ac.extract();
 }

@@ -1,123 +1,119 @@
 #include "FeaturesExtractor.h"
-#include "ArffCreator.h"
 
 
-
-/*
-int main(){
-	FeaturesExtractor ext("samples/");
-    ext.extract();
-
-	waitKey(0);
-	Sleep(100000);
-	return 0;
-}
-*/
-
-FeaturesExtractor::FeaturesExtractor(string source) {
-	this->source = source;
-}
-
-void FeaturesExtractor::extract() {
-	DIR *pDIR;
-	string ext = ".png";
-
-	// Cration du ArffCreator
-	ArffCreator ac("test");
-	list<list<string>> data;
-	list<pair<string, string>> features;	
-	
-	// Ecriture du Header du fichier Arff
-	features.push_back(list<pair<string, string>>::value_type("BBBarycenterX", "NUMERIC"));
-	features.push_back(list<pair<string, string>>::value_type("BBBarycenteY", "NUMERIC"));
-	features.push_back(list<pair<string, string>>::value_type("BBRatio", "NUMERIC"));
-	features.push_back(list<pair<string, string>>::value_type("PixelsRatio", "NUMERIC"));	
-	features.push_back(list<pair<string, string>>::value_type("class", "{accident,bomb,car,casualty,electricity,fire,fire_brigade,flood,gas,injury,paramedics,person,police,roadblock}"));
-
-	ac.writeHeader("Features", features);
-
-
+int main2(){
+	//FeaturesExtractor ext("samples/accident_000_00_1_1.png");
 	// Recolte des données
 	struct dirent *entry;
-	if (pDIR=opendir(this->source.c_str())) {
+	DIR *pDIR;
+	string ext = ".png";
+	if (pDIR=opendir("samples/")) {
 		while(entry = readdir(pDIR)){
 			if(strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
 				string imageName = entry->d_name;
 
 				// contains ext .png
 				if (imageName.find(ext) != string::npos) {
-					data.push_back(readImage(this->source + imageName));
+					FeaturesExtractor ext("samples/" + imageName);
 				} 
 			}
 		}
 		closedir(pDIR);
 	}
-	
-	// Ecriture des donnees dans le fichier Arff
-	ac.writeData(data);
+
+	waitKey(0);
+	Sleep(100000);
+	return 0;
 }
 
-list<string> FeaturesExtractor::readImage(string name) {	
-	cout << name << endl;
-	int thresh = 100;
-	Mat src = imread(name);
+FeaturesExtractor::FeaturesExtractor(string source) {
+	cout << source << endl;
 
-	// Preprocessing
-	cvtColor( src, src, CV_BGR2GRAY);
-	medianBlur(src, src, 5);
+	this->name = source;
+	this->originalImg = imread(name);
+	this->binaryImg = Mat(originalImg.rows, originalImg.cols, CV_BGR2GRAY);
+	this->greyscaleImg = Mat(originalImg.rows, originalImg.cols, CV_THRESH_BINARY);
+
+	cvtColor(this->originalImg, this->greyscaleImg, CV_BGR2GRAY);
+	medianBlur(this->greyscaleImg, this->greyscaleImg, 5);
+	threshold(this->greyscaleImg, this->binaryImg, 230, 255, CV_THRESH_BINARY);
+
+	/*imshow("color", originalImg);
+	imshow("greyscale", greyscaleImg);
+	imshow("binar", binaryImg);*/
+	Rect bb = this->find_boundingBox();
 
 
+	this->greyscaleBox = this->greyscaleImg(bb);
+	this->binaryBox = this->binaryImg(bb);
+	this->originalBox = this->originalImg(bb);
 
-	/*Point CoG = find_CoG(src);
+	/*imshow("color", greyscaleBox);
+	imshow("greyscale", binaryBox);
+	imshow("binar", originalBox);*/
+
+	Point CoG = getCoG();
 	Point half;
-	half.x = src.cols/2;
-	half.y = src.rows/2;
-	circle(src, half, 5, Scalar( 200, 200, 200 ), 1, 8, 0);
-	circle(src, CoG, 10, Scalar( 100, 100, 100 ), 1, 8, 0);
-	imshow(name, src);*/
-
-	// does not work
-	Rect bb = this->find_boundingBox(src);
-
-	//rectangle(src, bb,  Scalar(0,255,0),1, 8,0);
-	src = src(bb);
-	imshow(name, src);
-
-
-	// From main image
-
-
-
-	list<string> data;
-
-	// Calcul du barycentre
-	Point barycenter(0,0);
-
-	// Calcul du ratio BB
-	double BBRatio = getRatioBB(src);
-	cout << BBRatio << endl;
-
-
-	// Calcul du ratio blacks pixels / total pixels
-	int pixelsRatio = getRatioColor(src);
-	cout << pixelsRatio << endl;
-
-
-	// Extraction de la classe via le nom
-	string classe = extractClass(name);
-
-	data.push_back(std::to_string((long double)(barycenter.x)));
-	data.push_back(std::to_string((long double)(barycenter.y)));	
-	data.push_back(std::to_string((long double)(BBRatio)));
-	data.push_back(std::to_string((long double)(pixelsRatio)));
-	data.push_back(classe);
-
-
-	return data;
+	half.x = originalBox.cols/2;
+	half.y = originalBox.rows/2;
+	//circle(binaryBox, half, 5, Scalar( 200, 200, 200 ), 1, 8, 0);
+	circle(binaryBox, CoG, 10, Scalar( 100, 100, 100 ), 1, 8, 0);
+	imshow(name, binaryBox);
 }
-string FeaturesExtractor::extractClass(string name)
+
+Rect FeaturesExtractor::find_boundingBox() {
+	unsigned char *input = (unsigned char*)(binaryImg.data);
+
+	bool stop;
+	int topY, bottomY, leftX, rightX;
+	
+	stop = false;
+	for(int i=0; i<binaryImg.rows&&!stop; ++i) {
+		for(int j=0; j<binaryImg.cols&&!stop; ++j) {
+			if(input[binaryImg.step*j+i]==0) {
+				leftX = i;
+				stop = true;
+			}
+		}
+	}
+
+	stop = false;
+	for(int i=0; i<binaryImg.cols&&!stop; ++i) {
+		for(int j=0; j<binaryImg.rows&&!stop; ++j) {
+			if(input[binaryImg.step*i+j]==0) {
+				topY = i;
+				stop = true;
+			}
+		}
+	}
+
+	stop = false;
+	for(int i=binaryImg.cols-1;i>=0&&!stop; --i) {
+		for(int j=binaryImg.rows-1; j>=0&&!stop; --j) {
+			if(input[binaryImg.step*i+j]==0) {
+				bottomY = i;
+				stop = true;
+			}
+		}
+	}
+
+	stop = false;
+	for(int i=binaryImg.rows-1;i>=0&&!stop; --i) {
+		for(int j=binaryImg.cols-1; j>=0&&!stop; --j) {
+			if(input[binaryImg.step*j+i]==0) {
+				rightX = i;
+				stop = true;
+			}
+		}
+	}
+
+	return cv::Rect(leftX, topY, (rightX-leftX), (bottomY-topY));
+}
+
+
+string FeaturesExtractor::getClass()
 {
-	const std::string s = name;
+	const std::string s = this->name;
     std::regex rgx(".*/([a-z]+).*");
     std::smatch match;
 
@@ -131,73 +127,29 @@ list<Rect> FeaturesExtractor::getRectDiv(Mat) {
 }
 
 
-double FeaturesExtractor::getRatioBB(Mat src) {
-	return src.cols / src.rows;
+double FeaturesExtractor::getRatioBB() {
+	return originalBox.cols / originalBox.rows;
 }
-double FeaturesExtractor::getRatioColor(Mat src) {
-	//threshold(src, src, 230, 255, CV_THRESH_BINARY);
-	//imshow("name", src);
-	//cout << countNonZero(src) << endl;
-	return countNonZero(src) / src.rows*src.cols;
+
+double FeaturesExtractor::getRatioColor() {
+	return countNonZero(binaryBox) / binaryBox.rows*binaryBox.cols;
 }
 
 
-Rect FeaturesExtractor::find_boundingBox(Mat src)
-{
-	threshold(src, src, 230, 255, CV_THRESH_BINARY);
+Point FeaturesExtractor::getCoG() {
+	Point center;
+	Moments m = moments(binaryBox, false);
 
-	unsigned char *input = (unsigned char*)(src.data);
+	if (m.m00 == 0)
+		return center;
 
-	bool stop;
-	int topY, bottomY, leftX, rightX;
-	
-	stop = false;
-	for(int i=0; i<src.rows&&!stop; ++i) {
-		for(int j=0; j<src.cols&&!stop; ++j) {
-			if(input[src.step*j+i]==0) {
-				leftX = i;
-				stop = true;
-			}
-		}
-	}
+	center.x =  (int)(m.m10/m.m00);
+	center.y = (int)(m.m01/m.m00); 
 
-	stop = false;
-	for(int i=0; i<src.cols&&!stop; ++i) {
-		for(int j=0; j<src.rows&&!stop; ++j) {
-			if(input[src.step*i+j]==0) {
-				topY = i;
-				stop = true;
-			}
-		}
-	}
+	cout << "2x: " << ((double)(m.m10/m.m00)) / (double)binaryBox.cols << " y: " << ((double)(m.m01/m.m00)) / (double)binaryBox.rows << endl;
 
-	stop = false;
-	for(int i=src.cols-1;i>=0&&!stop; --i) {
-		for(int j=src.rows-1; j>=0&&!stop; --j) {
-			if(input[src.step*i+j]==0) {
-				bottomY = i;
-				stop = true;
-			}
-		}
-	}
-
-	stop = false;
-	for(int i=src.rows-1;i>=0&&!stop; --i) {
-		for(int j=src.cols-1; j>=0&&!stop; --j) {
-			if(input[src.step*j+i]==0) {
-				rightX = i;
-				stop = true;
-			}
-		}
-	}
-
-	return cv::Rect(leftX, topY, (rightX-leftX), (bottomY-topY));
+	return center;
 }
-
-void find_moments( Mat& gray );
-
-
-RNG rng(12345);
 
 
 void FeaturesExtractor::find_moments(Mat& gray)
@@ -213,27 +165,4 @@ void FeaturesExtractor::find_moments(Mat& gray)
 	Moments mom = moments( canny_output, true );
 }
 
-Point FeaturesExtractor::find_CoG(Mat& picture)
-{
-	
-	// http://opencvexamples.blogspot.com/2013/10/calculating-moments-of-image.html#.VLU9tmNZjvw
-	Mat binary;
-	Point center;
-	threshold(picture, binary, 200, 255, THRESH_BINARY);
-
-	double m00, m10, m01;
-	CvMoments moment = moments(binary, 1);
-	m00 = moment.m00;
-	if (m00 == 0) {
-		return center;
-	}
-	m10 = moment.m10;
-	m01 = moment.m01;
-	center.x = (int) (m10/m00);
-	center.y = (int) (m01/m00); 
-	
-	cout << "2x: " << center.x << " y: " << center.y << endl;
-
-	return center;
-}
 

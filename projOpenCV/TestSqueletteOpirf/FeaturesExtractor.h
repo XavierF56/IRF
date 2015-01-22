@@ -5,7 +5,7 @@
 #include <string>
 #include <list>
 #include <regex>
-#include"dirent.h"
+#include "dirent.h"
 #include <windows.h>
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -15,31 +15,30 @@
 using namespace std;
 using namespace cv;
 
-class FeaturesExtractor
-{
+class FeaturesExtractor {
 	private:
-		string source;
+		Mat originalImg;
+		Mat greyscaleImg;
+		Mat binaryImg;
+
+		Mat originalBox;
+		Mat greyscaleBox;
+		Mat binaryBox;
+		string name;
 
 	public:
 		void extract();
 
 		FeaturesExtractor(string);
 
-
-		void find_moments( Mat& gray );
-		Point find_CoG(Mat& picture);
-
-		double getDeviation();
-		double getAvg();
+		Point getCoG();
+		double getRatioBB();
+		double getRatioColor();
+		string getClass();
+		list<Rect> getRectDiv(Mat);
 
 	private:
-		string extractClass(string name);
-		list<string> readImage(string name);
 		void calculateMoments(string);
-		Rect find_boundingBox(Mat img);
-
-		double getRatioBB(Mat);
-		double getRatioColor(Mat);
-
-		list<Rect> getRectDiv(Mat);
+		Rect find_boundingBox();
+		void find_moments( Mat& gray );		
 };
