@@ -26,12 +26,15 @@ class FeaturesExtractor {
 		Mat binaryBox;
 		string name;
 
+		Point coG;
+
 	public:
 		void extract();
 
 		FeaturesExtractor(string);
 
-		Point getCoG();
+		double getNormalizedCoGX();
+		double getNormalizedCoGY();
 		double getRatioBB();
 		double getRatioColor();
 		string getClass();
@@ -40,5 +43,6 @@ class FeaturesExtractor {
 	private:
 		void calculateMoments(string);
 		Rect find_boundingBox();
-		void find_moments( Mat& gray );		
+		void find_moments( Mat& gray );
+		void computeCoG();
 };

@@ -82,12 +82,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArffCreator.cpp" />
     <ClCompile Include="FeaturesExtractor.cpp" />
     <ClCompile Include="ImageAnalyser.cpp" />
     <ClCompile Include="ImagesExtractor.cpp" />
     <ClCompile Include="ReferenceSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArffCreator.h" />
     <ClInclude Include="dirent.h" />
     <ClInclude Include="FeaturesExtractor.h" />
     <ClInclude Include="ImageAnalyser.h" />
