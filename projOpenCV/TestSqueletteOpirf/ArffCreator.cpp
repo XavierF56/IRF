@@ -70,15 +70,12 @@ void ArffCreator::extract() {
 		sstm1 << "BBBarycenterY" << index;
 		result = sstm1.str();
 		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));
-		stringstream sstm2;
-		sstm2 << "BBRatio" << index;
-		result = sstm2.str();
-		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));
 		stringstream sstm3;
 		sstm3 << "PixelsRatio" << index;
 		result = sstm3.str();
 		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));	
 	}
+	features.push_back(list<pair<string, string>>::value_type("BBRatio", "NUMERIC"));
 	features.push_back(list<pair<string, string>>::value_type("class", "{accident,bomb,car,casualty,electricity,fire,fire_brigade,flood,gas,injury,paramedics,person,police,roadblock}"));
 	writeHeader("Features", features);
 
@@ -96,10 +93,10 @@ void ArffCreator::extract() {
 					list<string> datum;
 					for (int index = 0; index < dividingFactor + 1; index++) {
 						datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGX(index))));
-						datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGY(index))));	
-						datum.push_back(std::to_string((long double)(tmp.getRatioBB(index))));
+						datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGY(index))));
 						datum.push_back(std::to_string((long double)(tmp.getRatioColor(index))));
-					}
+					}	
+					datum.push_back(std::to_string((long double)(tmp.getRatioBB(0))));
 					datum.push_back(tmp.getClass());
 
 					data.push_back(datum);
