@@ -144,7 +144,7 @@ Rect FeaturesExtractor::find_boundingBox() {
 string FeaturesExtractor::getClass()
 {
 	const std::string s = this->name;
-    std::regex rgx(".*/([a-z]+).*");
+    std::regex rgx(".*/([a-z]+(_[a-z]+)?).*");
     std::smatch match;
 
 	if (std::regex_search(s.begin(), s.end(), match, rgx))
