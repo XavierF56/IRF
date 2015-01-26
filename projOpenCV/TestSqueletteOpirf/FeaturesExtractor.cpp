@@ -144,7 +144,7 @@ Rect FeaturesExtractor::find_boundingBox() {
 string FeaturesExtractor::getClass()
 {
 	const std::string s = this->name;
-    std::regex rgx(".*/([a-z]+).*");
+    std::regex rgx(".*/([a-z]+(_[a-z]+)?).*");
     std::smatch match;
 
 	if (std::regex_search(s.begin(), s.end(), match, rgx))
@@ -161,6 +161,17 @@ double FeaturesExtractor::getRatioBB(int index) {
 
 double FeaturesExtractor::getRatioColor(int index) {
 	return (double) countNonZero(binaryBox[index]) / ((double) binaryBox[index].rows*binaryBox[index].cols);
+}
+
+vector<double> FeaturesExtractor::getHuMoments(int index) {
+	std::vector<double> ret;
+	double hu[7];
+	cv::HuMoments(cv::moments(binaryBox[index]), hu);
+	
+	for(int i=0;i<7;++i) {
+		ret.push_back(hu[i]);
+	}
+	return ret;
 }
 
 
