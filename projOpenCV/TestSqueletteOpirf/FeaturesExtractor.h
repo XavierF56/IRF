@@ -40,6 +40,7 @@ class FeaturesExtractor {
 		double getNormalizedCoGY(int);
 		double getRatioBB(int);
 		double getRatioColor(int);
+		vector<double> getHuMoments(int);
 		string getClass();
 
 	private:
