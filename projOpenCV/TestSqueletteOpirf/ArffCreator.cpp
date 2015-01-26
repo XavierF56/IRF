@@ -51,6 +51,8 @@ void ArffCreator::closeArffFile()
 }
 
 void ArffCreator::extract() {
+	int dividingFactor = 4;
+
 	DIR *pDIR;
 	string ext = ".png";
 
@@ -59,12 +61,25 @@ void ArffCreator::extract() {
 	list<pair<string, string>> features;	
 	
 	// Ecriture du Header du fichier Arff
-	features.push_back(list<pair<string, string>>::value_type("BBBarycenterX", "NUMERIC"));
-	features.push_back(list<pair<string, string>>::value_type("BBBarycenteY", "NUMERIC"));
-	features.push_back(list<pair<string, string>>::value_type("BBRatio", "NUMERIC"));
-	features.push_back(list<pair<string, string>>::value_type("PixelsRatio", "NUMERIC"));	
+	for (int index = 0; index < dividingFactor + 1; index++) {
+		stringstream sstm;
+		sstm << "BBBarycenterX" << index;
+		string	result = sstm.str();
+		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));
+		stringstream sstm1;
+		sstm1 << "BBBarycenterY" << index;
+		result = sstm1.str();
+		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));
+		stringstream sstm2;
+		sstm2 << "BBRatio" << index;
+		result = sstm2.str();
+		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));
+		stringstream sstm3;
+		sstm3 << "PixelsRatio" << index;
+		result = sstm3.str();
+		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));	
+	}
 	features.push_back(list<pair<string, string>>::value_type("class", "{accident,bomb,car,casualty,electricity,fire,fire_brigade,flood,gas,injury,paramedics,person,police,roadblock}"));
-
 	writeHeader("Features", features);
 
 
@@ -77,12 +92,14 @@ void ArffCreator::extract() {
 
 				// contains ext .png
 				if (imageName.find(ext) != string::npos) {
-					FeaturesExtractor tmp(this->folder + imageName, 4);
+					FeaturesExtractor tmp(this->folder + imageName, dividingFactor);
 					list<string> datum;
-					datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGX(0))));
-					datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGY(0))));	
-					datum.push_back(std::to_string((long double)(tmp.getRatioBB(0))));
-					datum.push_back(std::to_string((long double)(tmp.getRatioColor(0))));
+					for (int index = 0; index < dividingFactor + 1; index++) {
+						datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGX(index))));
+						datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGY(index))));	
+						datum.push_back(std::to_string((long double)(tmp.getRatioBB(index))));
+						datum.push_back(std::to_string((long double)(tmp.getRatioColor(index))));
+					}
 					datum.push_back(tmp.getClass());
 
 					data.push_back(datum);
@@ -100,5 +117,6 @@ int main(){
 	ArffCreator ac("test2", "samples/");
 	ac.extract();
 	waitKey(0);
+	cout << "I am done" << endl;
 	Sleep(100000);
 }
