@@ -2,7 +2,6 @@
 
 
 int main2(){
-	//FeaturesExtractor ext("samples/accident_000_00_1_1.png");
 	// Recolte des données
 	struct dirent *entry;
 	DIR *pDIR;
@@ -45,19 +44,19 @@ FeaturesExtractor::FeaturesExtractor(string source, int div) {
 	imshow("binar", binaryImg);*/
 	Rect bb = this->find_boundingBox();
 
+
 	this->originalBox = vector<Mat>(div + 1);
 	this->binaryBox = vector<Mat>(div + 1);
 	this->greyscaleBox = vector<Mat>(div + 1);
 
+	try {
 	this->greyscaleBox[0] = this->greyscaleImg(bb);
 	this->binaryBox[0] = this->binaryImg(bb);
 	this->originalBox[0] = this->originalImg(bb);
-
-	/*imshow("color", greyscaleBox);
-	imshow("greyscale", binaryBox);
-	imshow("binar", originalBox);*/
-
-	
+	} catch(...) {
+		cout << "wrong " << name << endl; 
+	}
+		
 
 	divide();
 	computeCoG();
@@ -173,13 +172,12 @@ void FeaturesExtractor::computeCoG() {
 		for(int x=0; x<binaryBox[index].cols; x++) {
 			for(int y=0; y<binaryBox[index].rows; y++) {
 				int val = binaryBox[index].at<uchar>(y,x);
-				if( val == 0) {
+				if(val == 0) {
 					sumx += x;
 					sumy += y;
 					num_pixel++;
 				}
 			}
-			
 		}
 		coG[index] = Point (sumx/num_pixel, sumy/num_pixel);
 		/*circle(binaryBox[index], coG[index], 5, Scalar( 200, 200, 200 ), 1, 8, 0);
