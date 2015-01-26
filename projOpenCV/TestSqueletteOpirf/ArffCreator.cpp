@@ -103,6 +103,7 @@ void ArffCreator::extract() {
 					datum.push_back(tmp.getClass());
 
 					data.push_back(datum);
+					//cout << imageName << endl;
 				} 
 			}
 		}
@@ -115,7 +116,8 @@ void ArffCreator::extract() {
 
 /*
 int main(){
-	ArffCreator ac("test2", "samples/");
+	ArffCreator ac("final", "Result_irf/");
+	//ArffCreator ac("final", "samples/");
 	ac.extract();
 	waitKey(0);
 	cout << "I am done" << endl;
