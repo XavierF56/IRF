@@ -41,6 +41,8 @@ class FeaturesExtractor {
 		double getRatioBB(int);
 		double getRatioColor(int);
 		string getClass();
+		double getMaxProjectionX(int);
+		double getMaxProjectionY(int);
 
 	private:
 		void calculateMoments(string);

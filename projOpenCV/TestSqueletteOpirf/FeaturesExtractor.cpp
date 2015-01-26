@@ -207,4 +207,46 @@ void FeaturesExtractor::find_moments(Mat& gray)
 	Moments mom = moments( canny_output, true );
 }
 
+double FeaturesExtractor::getMaxProjectionX(int index)
+{
+	int valMax = 0;
+	int indexMax;
+	for(int x=0; x<binaryBox[index].cols; x++) {
+		int sumx = 0;
+		for(int y=0; y<binaryBox[index].rows; y++) {
+			int val = binaryBox[index].at<uchar>(y,x);
+			if(val == 0) {
+				sumx++;
+			}
+		}
+		if(sumx >= valMax)
+		{
+			valMax = sumx;
+			indexMax = x;
+		}
+	}
+	return (double)indexMax/(double)(binaryBox[index].cols);
+}
+
+double FeaturesExtractor::getMaxProjectionY(int index)
+{
+	int sumy = 0;
+	int valMax = 0;
+	int indexMax;
+	for(int y=0; y<binaryBox[index].rows; y++) {
+		int sumy = 0;
+		for(int x=0; x<binaryBox[index].cols; x++) {			
+			int val = binaryBox[index].at<uchar>(y,x);
+			if(val == 0) {
+				sumy++;
+			}
+		}
+		if(sumy >= valMax)
+		{
+			valMax = sumy;
+			indexMax = sumy;
+		}
+	}
+	return (double)indexMax/(double)(binaryBox[index].rows);
+}
 
