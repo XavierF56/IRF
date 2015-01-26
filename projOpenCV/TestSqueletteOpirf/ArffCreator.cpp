@@ -113,6 +113,7 @@ void ArffCreator::extract() {
 	writeData(data);
 }
 
+/*
 int main(){
 	ArffCreator ac("test2", "samples/");
 	ac.extract();
@@ -120,3 +121,4 @@ int main(){
 	cout << "I am done" << endl;
 	Sleep(100000);
 }
+*/

@@ -5,7 +5,8 @@ int main()
 {
 	ExtractionVerifier ver("Verif\\Result\\");
 	ver.verifyAll("Verif\\ToCheck\\");
-
+	//waitKey(0);
+	//Sleep(100000);
 }
 
 
@@ -29,8 +30,9 @@ void ExtractionVerifier::verifyAll(string destination)
 				if (imageName.find(ext) != string::npos)
 				{
 					Mat src = imread(this->source + imageName);
-					if (verifyImage(src))
+					if (verifyImage(src)){
 						imwrite(destination + imageName, src);
+					}
 				} 
 			}
 		}
@@ -40,15 +42,18 @@ void ExtractionVerifier::verifyAll(string destination)
 
 bool ExtractionVerifier::verifyImage(Mat src)
 {
-	threshold(src, src, 230, 255, CV_THRESH_BINARY);
-
+	imshow("test", src);
+	Mat binary(src.rows, src.cols, CV_THRESH_BINARY);
+	cvtColor(src, src, CV_BGR2GRAY);
+	threshold(src, binary, 230, 255, CV_THRESH_BINARY);
+	//imshow("testbinary", binary);
 	bool stop;
 
-	unsigned char *input = (unsigned char*)(src.data);
+	unsigned char *input = (unsigned char*)(binary.data);
 	
 	stop = false;
-	for(int i=1; i<src.rows&&!stop; ) {
-		if(input[i] = 0 || input[i*src.step] == 0 /*|| input[src.step*(src.step-1) + i] == 0*/ || input[++i*src.step - 1] == 0)
+	for(int i=1; i<binary.rows&&!stop; ) {
+		if(input[i] = 0 || input[i*binary.step] == 0 /*|| input[src.step*(src.step-1) + i] == 0*/ || input[++i*binary.step - 1] == 0)
 		{
 			return true;
 		}
