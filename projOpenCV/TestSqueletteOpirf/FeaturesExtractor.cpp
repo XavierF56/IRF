@@ -164,6 +164,17 @@ double FeaturesExtractor::getRatioColor(int index) {
 	return (double) countNonZero(binaryBox[index]) / ((double) binaryBox[index].rows*binaryBox[index].cols);
 }
 
+vector<double> FeaturesExtractor::getHuMoments(int index) {
+	std::vector<double> ret;
+	double hu[7];
+	cv::HuMoments(cv::moments(binaryBox[index]), hu);
+	
+	for(int i=0;i<7;++i) {
+		ret.push_back(hu[i]);
+	}
+	return ret;
+}
+
 
 void FeaturesExtractor::computeCoG() {
 	this->coG = vector<Point>(div + 1);
