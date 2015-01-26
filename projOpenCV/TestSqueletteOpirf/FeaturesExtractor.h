@@ -10,6 +10,7 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/core/core.hpp"
+//#include <math.h>
 
 
 using namespace std;
@@ -21,28 +22,30 @@ class FeaturesExtractor {
 		Mat greyscaleImg;
 		Mat binaryImg;
 
-		Mat originalBox;
-		Mat greyscaleBox;
-		Mat binaryBox;
+		vector<Mat> originalBox;
+		vector<Mat> greyscaleBox;
+		vector<Mat> binaryBox;
 		string name;
 
-		Point coG;
+		vector<Point> coG;
+
+		int div;
 
 	public:
 		void extract();
 
-		FeaturesExtractor(string);
+		FeaturesExtractor(string, int);
 
-		double getNormalizedCoGX();
-		double getNormalizedCoGY();
-		double getRatioBB();
-		double getRatioColor();
+		double getNormalizedCoGX(int);
+		double getNormalizedCoGY(int);
+		double getRatioBB(int);
+		double getRatioColor(int);
 		string getClass();
-		list<Rect> getRectDiv(Mat);
 
 	private:
 		void calculateMoments(string);
 		Rect find_boundingBox();
 		void find_moments( Mat& gray );
 		void computeCoG();
+		void divide();
 };

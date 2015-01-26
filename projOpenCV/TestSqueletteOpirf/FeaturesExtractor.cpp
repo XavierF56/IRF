@@ -14,7 +14,7 @@ int main2(){
 
 				// contains ext .png
 				if (imageName.find(ext) != string::npos) {
-					FeaturesExtractor ext("samples/" + imageName);
+					FeaturesExtractor ext("samples/" + imageName, 16);
 				} 
 			}
 		}
@@ -26,8 +26,10 @@ int main2(){
 	return 0;
 }
 
-FeaturesExtractor::FeaturesExtractor(string source) {
+FeaturesExtractor::FeaturesExtractor(string source, int div) {
 	//cout << source << endl;
+
+	this->div = div;
 
 	this->name = source;
 	this->originalImg = imread(name);
@@ -43,23 +45,52 @@ FeaturesExtractor::FeaturesExtractor(string source) {
 	imshow("binar", binaryImg);*/
 	Rect bb = this->find_boundingBox();
 
+	this->originalBox = vector<Mat>(div + 1);
+	this->binaryBox = vector<Mat>(div + 1);
+	this->greyscaleBox = vector<Mat>(div + 1);
 
-	this->greyscaleBox = this->greyscaleImg(bb);
-	this->binaryBox = this->binaryImg(bb);
-	this->originalBox = this->originalImg(bb);
+	this->greyscaleBox[0] = this->greyscaleImg(bb);
+	this->binaryBox[0] = this->binaryImg(bb);
+	this->originalBox[0] = this->originalImg(bb);
 
 	/*imshow("color", greyscaleBox);
 	imshow("greyscale", binaryBox);
 	imshow("binar", originalBox);*/
 
+	
+
+	divide();
 	computeCoG();
+
 	/*Point half;
 	half.x = originalBox.cols/2;
 	half.y = originalBox.rows/2;*/
 	//circle(binaryBox, half, 5, Scalar( 200, 200, 200 ), 1, 8, 0);
-	circle(binaryBox, coG, 10, Scalar( 100, 100, 100 ), 1, 8, 0);
-	imshow(name, binaryBox);
+	//circle(binaryBox[0], coG, 10, Scalar( 100, 100, 100 ), 1, 8, 0);
+	//imshow(name, binaryBox);
 }
+
+void FeaturesExtractor::divide() {
+	int r = sqrt((double) div);
+	int c = r;
+
+	int height = originalBox[0].rows / r;
+	int  width = originalBox[0].cols / c;
+
+	int index = 1;
+
+	for (int i = 0; i < r; i++) {
+		for (int j = 0; j < c; j++) {
+			Rect div(i*width, j*height, width, height);
+			this->greyscaleBox[index] = this->greyscaleBox[0](div);
+			this->binaryBox[index] = this->binaryBox[0](div);
+			this->originalBox[index] = this->originalBox[0](div);
+
+			index++;
+		}
+	}
+}
+
 
 Rect FeaturesExtractor::find_boundingBox() {
 	unsigned char *input = (unsigned char*)(binaryImg.data);
@@ -122,43 +153,46 @@ string FeaturesExtractor::getClass()
 }
 
 
-list<Rect> FeaturesExtractor::getRectDiv(Mat) {
-	list<Rect> res;
+
+
+
+double FeaturesExtractor::getRatioBB(int index) {
+	return (double)originalBox[index].cols / (double)originalBox[index].rows;
 }
 
-
-double FeaturesExtractor::getRatioBB() {
-	return (double)originalBox.cols / (double)originalBox.rows;
-}
-
-double FeaturesExtractor::getRatioColor() {
-	//cout << "non zero " << countNonZero(binaryBox) << endl <<binaryBox.rows << endl << binaryBox.cols;
-	return (double) countNonZero(binaryBox) / ((double) binaryBox.rows*binaryBox.cols);
+double FeaturesExtractor::getRatioColor(int index) {
+	return (double) countNonZero(binaryBox[index]) / ((double) binaryBox[index].rows*binaryBox[index].cols);
 }
 
 
 void FeaturesExtractor::computeCoG() {
-	float sumx=0, sumy=0;
-    float num_pixel = 0;
-	for(int x=0; x<binaryBox.cols; x++) {
-        for(int y=0; y<binaryBox.rows; y++) {
-            int val = binaryBox.at<uchar>(y,x);
-            if( val == 0) {
-                sumx += x;
-                sumy += y;
-                num_pixel++;
-            }
-        }
-    }
-    coG = Point (sumx/num_pixel, sumy/num_pixel);
+	this->coG = vector<Point>(div + 1);
+	for (int index = 0; index < div + 1; index++) {
+		float sumx=0, sumy=0;
+		float num_pixel = 0;
+		for(int x=0; x<binaryBox[index].cols; x++) {
+			for(int y=0; y<binaryBox[index].rows; y++) {
+				int val = binaryBox[index].at<uchar>(y,x);
+				if( val == 0) {
+					sumx += x;
+					sumy += y;
+					num_pixel++;
+				}
+			}
+			
+		}
+		coG[index] = Point (sumx/num_pixel, sumy/num_pixel);
+		/*circle(binaryBox[index], coG[index], 5, Scalar( 200, 200, 200 ), 1, 8, 0);
+		imshow(index +" " + name, binaryBox[index]);*/
+	}
 }
 
-double FeaturesExtractor::getNormalizedCoGX() {
-	return (double)coG.x/(double)binaryBox.cols;
+double FeaturesExtractor::getNormalizedCoGX(int index) {
+	return (double)coG[index].x/(double)binaryBox[index].cols;
 }
 
-double FeaturesExtractor::getNormalizedCoGY() {
-	return (double)coG.y/(double)binaryBox.rows;
+double FeaturesExtractor::getNormalizedCoGY(int index) {
+	return (double)coG[index].y/(double)binaryBox[index].rows;
 }
 
 

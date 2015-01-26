@@ -77,12 +77,12 @@ void ArffCreator::extract() {
 
 				// contains ext .png
 				if (imageName.find(ext) != string::npos) {
-					FeaturesExtractor tmp(this->folder + imageName);
+					FeaturesExtractor tmp(this->folder + imageName, 4);
 					list<string> datum;
-					datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGX())));
-					datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGY())));	
-					datum.push_back(std::to_string((long double)(tmp.getRatioBB())));
-					datum.push_back(std::to_string((long double)(tmp.getRatioColor())));
+					datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGX(0))));
+					datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGY(0))));	
+					datum.push_back(std::to_string((long double)(tmp.getRatioBB(0))));
+					datum.push_back(std::to_string((long double)(tmp.getRatioColor(0))));
 					datum.push_back(tmp.getClass());
 
 					data.push_back(datum);
