@@ -60,13 +60,6 @@ FeaturesExtractor::FeaturesExtractor(string source, int div) {
 
 	divide();
 	computeCoG();
-
-	/*Point half;
-	half.x = originalBox.cols/2;
-	half.y = originalBox.rows/2;*/
-	//circle(binaryBox, half, 5, Scalar( 200, 200, 200 ), 1, 8, 0);
-	//circle(binaryBox[0], coG, 10, Scalar( 100, 100, 100 ), 1, 8, 0);
-	//imshow(name, binaryBox);
 }
 
 void FeaturesExtractor::divide() {

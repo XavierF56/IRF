@@ -51,7 +51,7 @@ void ArffCreator::closeArffFile()
 }
 
 void ArffCreator::extract() {
-	int dividingFactor = 16;
+	int dividingFactor = 36;
 
 	DIR *pDIR;
 	string ext = ".png";
