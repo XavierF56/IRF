@@ -51,7 +51,7 @@ void ArffCreator::closeArffFile()
 }
 
 void ArffCreator::extract() {
-	int dividingFactor = 4;
+	int dividingFactor = 16;
 
 	DIR *pDIR;
 	string ext = ".png";
@@ -63,22 +63,32 @@ void ArffCreator::extract() {
 	// Ecriture du Header du fichier Arff
 	for (int index = 0; index < dividingFactor + 1; index++) {
 		stringstream sstm;
-		sstm << "BBBarycenterX" << index;
+		/*sstm << "BBBarycenterX" << index;
 		string	result = sstm.str();
 		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));
 		stringstream sstm1;
 		sstm1 << "BBBarycenterY" << index;
 		result = sstm1.str();
-		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));
+		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));*/
 		stringstream sstm3;
 		sstm3 << "PixelsRatio" << index;
-		result = sstm3.str();
+		string result = sstm3.str();
 		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));
 		stringstream sstm4;
 		sstm4 << "HuMoment0" << index;
 		result = sstm4.str();
 		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));
+		/*stringstream sstm5;
+		sstm5 << "HuMoment1" << index;
+		result = sstm5.str();
+		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));
+		stringstream sstm6;
+		sstm6 << "HuMoment2" << index;
+		result = sstm6.str();
+		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));*/
 	}
+	features.push_back(list<pair<string, string>>::value_type("BarycenterX", "NUMERIC"));
+	features.push_back(list<pair<string, string>>::value_type("BarycenterY", "NUMERIC"));
 	features.push_back(list<pair<string, string>>::value_type("BBRatio", "NUMERIC"));
 	features.push_back(list<pair<string, string>>::value_type("class", "{accident,bomb,car,casualty,electricity,fire,fire_brigade,flood,gas,injury,paramedics,person,police,roadblock}"));
 	writeHeader("Features", features);
@@ -94,18 +104,31 @@ void ArffCreator::extract() {
 				// contains ext .png
 				if (imageName.find(ext) != string::npos) {
 					FeaturesExtractor tmp(this->folder + imageName, dividingFactor);
-					list<string> datum;
-					for (int index = 0; index < dividingFactor + 1; index++) {
-						datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGX(index))));
-						datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGY(index))));
-						datum.push_back(std::to_string((long double)(tmp.getRatioColor(index))));
-						datum.push_back(std::to_string((long double)(tmp.getHuMoments(index))[0]));
+					
+					/*bool white = false;
+                    for (int index = 0; index < 1; index++) {
+                        if() {
+                            white = true;
+                        }
+                    }*/
+                    if(tmp.getRatioColor(0) < 0.99) {
+						list<string> datum;
+						for (int index = 0; index < dividingFactor + 1; index++) {
+							datum.push_back(std::to_string((long double)(tmp.getRatioColor(index))));
+							datum.push_back(std::to_string((long double)(tmp.getHuMoments(index))[0]));
+							//datum.push_back(std::to_string((long double)(tmp.getHuMoments(index))[1]));
+							//datum.push_back(std::to_string((long double)(tmp.getHuMoments(index))[2]));
+						}
+						datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGX(0))));
+						datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGY(0))));
+						datum.push_back(std::to_string((long double)(tmp.getRatioBB(0))));
+						datum.push_back(tmp.getClass());
+					
+						data.push_back(datum);
+					} else {
+						cout << "Arghh " << imageName << endl;
 					}
-					datum.push_back(std::to_string((long double)(tmp.getRatioBB(0))));
-					datum.push_back(tmp.getClass());
-
-					data.push_back(datum);
-					//cout << imageName << endl;
+					//
 				} 
 			}
 		}
@@ -116,13 +139,13 @@ void ArffCreator::extract() {
 	writeData(data);
 }
 
-/*
+
 int main(){
-	ArffCreator ac("final", "Result_irf/");
+	ArffCreator ac("99999", "Result_irf/");
 	//ArffCreator ac("final", "samples/");
 	ac.extract();
 	waitKey(0);
 	cout << "I am done" << endl;
 	Sleep(100000);
 }
-*/
+
