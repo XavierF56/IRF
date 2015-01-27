@@ -80,6 +80,8 @@ void ArffCreator::extract() {
 		features.push_back(list<pair<string, string>>::value_type(result, "NUMERIC"));
 	}
 	features.push_back(list<pair<string, string>>::value_type("BBRatio", "NUMERIC"));
+	features.push_back(list<pair<string, string>>::value_type("IndexX", "NUMERIC"));
+	features.push_back(list<pair<string, string>>::value_type("IndexY", "NUMERIC"));
 	features.push_back(list<pair<string, string>>::value_type("class", "{accident,bomb,car,casualty,electricity,fire,fire_brigade,flood,gas,injury,paramedics,person,police,roadblock}"));
 	writeHeader("Features", features);
 
@@ -100,6 +102,8 @@ void ArffCreator::extract() {
 						datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGY(index))));
 						datum.push_back(std::to_string((long double)(tmp.getRatioColor(index))));
 						datum.push_back(std::to_string((long double)(tmp.getHuMoments(index))[0]));
+						datum.push_back(std::to_string((long double)(tmp.getMaxProjectionX(index))));
+						datum.push_back(std::to_string((long double)(tmp.getMaxProjectionY(index))));
 					}
 					datum.push_back(std::to_string((long double)(tmp.getRatioBB(0))));
 					datum.push_back(tmp.getClass());
@@ -116,13 +120,14 @@ void ArffCreator::extract() {
 	writeData(data);
 }
 
-/*
+
 int main(){
-	ArffCreator ac("final", "Result_irf/");
-	//ArffCreator ac("final", "samples/");
+	//ArffCreator ac("train", "Result_irf/");
+	ArffCreator ac("final", "samples/");
+	//ArffCreator ac("test", "Result/");
 	ac.extract();
 	waitKey(0);
 	cout << "I am done" << endl;
 	Sleep(100000);
 }
-*/
+

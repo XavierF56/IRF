@@ -236,6 +236,7 @@ double FeaturesExtractor::getMaxProjectionX(int index)
 			indexMax = x;
 		}
 	}
+	cout << "IndexX " << indexMax << " / " << binaryBox[index].cols << endl;
 	return (double)indexMax/(double)(binaryBox[index].cols);
 }
 
@@ -257,7 +258,8 @@ double FeaturesExtractor::getMaxProjectionY(int index)
 			valMax = sumy;
 			indexMax = sumy;
 		}
-	}
+	}	
+	cout << "IndexY " << indexMax << " / " << binaryBox[index].rows << endl;
 	return (double)indexMax/(double)(binaryBox[index].rows);
 }
 
