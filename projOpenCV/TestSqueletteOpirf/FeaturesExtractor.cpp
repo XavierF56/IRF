@@ -35,8 +35,12 @@ FeaturesExtractor::FeaturesExtractor(string source, int div) {
 	this->binaryImg = Mat(originalImg.rows, originalImg.cols, CV_BGR2GRAY);
 	this->greyscaleImg = Mat(originalImg.rows, originalImg.cols, CV_THRESH_BINARY);
 
-	cvtColor(this->originalImg, this->greyscaleImg, CV_BGR2GRAY);
+	//GaussianBlur(this->greyscaleImg, this->greyscaleImg, Size(3, 3), 0, 0, BORDER_DEFAULT);
+	
 	medianBlur(this->greyscaleImg, this->greyscaleImg, 5);
+	Laplacian(this->greyscaleImg, this->greyscaleImg, CV_16S, 3, 1, 0, BORDER_DEFAULT );
+
+	cvtColor(this->originalImg, this->greyscaleImg, CV_BGR2GRAY);
 	threshold(this->greyscaleImg, this->binaryImg, 230, 255, CV_THRESH_BINARY);
 
 	/*imshow("color", originalImg);

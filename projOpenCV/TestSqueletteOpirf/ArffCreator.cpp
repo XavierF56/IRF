@@ -51,7 +51,7 @@ void ArffCreator::closeArffFile()
 }
 
 void ArffCreator::extract() {
-	int dividingFactor = 36;
+	int dividingFactor = 16;
 
 	DIR *pDIR;
 	string ext = ".png";
@@ -106,7 +106,7 @@ void ArffCreator::extract() {
 				// contains ext .png
 				if (imageName.find(ext) != string::npos) {
 					FeaturesExtractor tmp(this->folder + imageName, dividingFactor);
-                    if(tmp.getRatioColor(0) < 0.99) {
+                    if(tmp.getRatioColor(0) < 0.99) { // check if image is not white
 						list<string> datum;
 						for (int index = 0; index < dividingFactor + 1; index++) {
 							datum.push_back(std::to_string((long double)(tmp.getRatioColor(index))));
@@ -136,7 +136,7 @@ void ArffCreator::extract() {
 	writeData(data);
 }
 
-/*
+
 int main(){
 
 	ArffCreator ac("99999", "Result_irf/");
@@ -147,4 +147,3 @@ int main(){
 	Sleep(100000);
 }
 
-*/
