@@ -90,8 +90,8 @@ void ArffCreator::extract() {
 	features.push_back(list<pair<string, string>>::value_type("BarycenterX", "NUMERIC"));
 	features.push_back(list<pair<string, string>>::value_type("BarycenterY", "NUMERIC"));
 	features.push_back(list<pair<string, string>>::value_type("BBRatio", "NUMERIC"));
-	features.push_back(list<pair<string, string>>::value_type("IndexX", "NUMERIC"));
-	features.push_back(list<pair<string, string>>::value_type("IndexY", "NUMERIC"));
+	//features.push_back(list<pair<string, string>>::value_type("IndexX", "NUMERIC"));
+	//features.push_back(list<pair<string, string>>::value_type("IndexY", "NUMERIC"));
 	features.push_back(list<pair<string, string>>::value_type("class", "{accident,bomb,car,casualty,electricity,fire,fire_brigade,flood,gas,injury,paramedics,person,police,roadblock}"));
 	writeHeader("Features", features);
 
@@ -106,12 +106,6 @@ void ArffCreator::extract() {
 				// contains ext .png
 				if (imageName.find(ext) != string::npos) {
 					FeaturesExtractor tmp(this->folder + imageName, dividingFactor);
-					/*bool white = false;
-                    for (int index = 0; index < 1; index++) {
-                        if() {
-                            white = true;
-                        }
-                    }*/
                     if(tmp.getRatioColor(0) < 0.99) {
 						list<string> datum;
 						for (int index = 0; index < dividingFactor + 1; index++) {
@@ -123,8 +117,8 @@ void ArffCreator::extract() {
 						datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGX(0))));
 						datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGY(0))));
 						datum.push_back(std::to_string((long double)(tmp.getRatioBB(0))));
-						datum.push_back(std::to_string((long double)(tmp.getMaxProjectionX(index))));
-						datum.push_back(std::to_string((long double)(tmp.getMaxProjectionY(index))));
+						//datum.push_back(std::to_string((long double)(tmp.getMaxProjectionX(0))));
+						//datum.push_back(std::to_string((long double)(tmp.getMaxProjectionY(0))));
 						datum.push_back(tmp.getClass());
 					
 						data.push_back(datum);
@@ -142,19 +136,15 @@ void ArffCreator::extract() {
 	writeData(data);
 }
 
-
+/*
 int main(){
-<<<<<<< HEAD
-	//ArffCreator ac("train", "Result_irf/");
-	ArffCreator ac("final", "samples/");
-	//ArffCreator ac("test", "Result/");
-=======
+
 	ArffCreator ac("99999", "Result_irf/");
 	//ArffCreator ac("final", "samples/");
->>>>>>> 6609f401c41f5178ad786d155ef73df991a8f3dd
 	ac.extract();
 	waitKey(0);
 	cout << "I am done" << endl;
 	Sleep(100000);
 }
 
+*/
