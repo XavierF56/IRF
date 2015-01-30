@@ -8,27 +8,25 @@
 
 ImagesExtractor::ImagesExtractor(int i)
 {
-	string path = "Base\\";
-	LPCWSTR  Lfolder = L"Result\\";
-	string  folder = "Result\\";
+	string path = "\\\\bricolo\\p12\\5info\\irfBD\\NicIcon\\";
+	LPCWSTR Lfolder = L"Result\\";
+	string folder = "Result\\";
 	ofstream file;
 	CreateDirectory(Lfolder, NULL);
-	for( int i = 1; i <= 6; i++)
+	for( int i = 0; i <= 34; i++)
 	{
 		string scripter;
 		stringstream ss1;
-		ss1 << std::setfill('0') << std::setw (2) << i;
+		ss1 << std::setfill('0') << std::setw (3) << i;
 		ss1 >> scripter;
-		for( int j = 1; j <= 2; j++)
+		for( int j = 0; j <= 22; j++)
 		{
 			string page, form;
 			stringstream ss2;
-			ss2 << std::setfill('0') << std::setw (4) << j;
+			ss2 << std::setfill('0') << std::setw (2) << j;
 			ss2 >> page;
 			form = scripter + page;
-			string test = path + "s" + scripter + "_" + page + ".png";
-			cout << test << endl;
-			ImageAnalyser imgAn(test);
+			ImageAnalyser imgAn(path + "w" + scripter + "-scans/" + form + ".png");
 			if(imgAn.isCorrect())
 			{
 				for( int row = 1; row <= 7; row ++)
@@ -40,7 +38,6 @@ ImagesExtractor::ImagesExtractor(int i)
 						cout << filename << endl;
 						Mat img(imgAn.extract(row, column));
 						imwrite(folder + filename + ".png", img);
-					
 						file.open(folder + filename + ".txt");
 						file << "label " + label + "\nform " + form + "\nscripter " + scripter + "\npage " + page + "\nrow " + std::to_string((long double)row) + "\ncolumn " + std::to_string((long double)column) + "\nsize";
 						file.close();
@@ -103,7 +100,7 @@ ImagesExtractor::~ImagesExtractor()
 {
 }
 
-/*
+
 int main(int argc, char* argv[])
 {
 	ImagesExtractor imgE(0);
@@ -112,4 +109,4 @@ int main(int argc, char* argv[])
 	cout << "I am done" << endl;
 	Sleep(100000);
 }
-*/
+

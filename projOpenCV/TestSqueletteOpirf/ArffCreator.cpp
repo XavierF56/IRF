@@ -136,7 +136,7 @@ void ArffCreator::extract() {
 	writeData(data);
 }
 
-
+/*
 int main(){
 
 	ArffCreator ac("99999", "Result_irf/");
@@ -145,5 +145,5 @@ int main(){
 	waitKey(0);
 	cout << "I am done" << endl;
 	Sleep(100000);
-}
+}*/
 
