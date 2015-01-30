@@ -187,33 +187,30 @@ void FeaturesExtractor::computeCoG() {
 				}
 			}
 		}
+
 		coG[index] = Point (sumx/num_pixel, sumy/num_pixel);
-		/*circle(binaryBox[index], coG[index], 5, Scalar( 200, 200, 200 ), 1, 8, 0);
-		imshow(index +" " + name, binaryBox[index]);*/
 	}
 }
 
 double FeaturesExtractor::getNormalizedCoGX(int index) {
-	return (double)coG[index].x/(double)binaryBox[index].cols;
+	double ret = (double)coG[index].x/(double)binaryBox[index].cols;
+	if (ret < 0 || ret > 1) {
+		return 0.5;
+	} else {
+		return ret;
+	}
+	
 }
 
 double FeaturesExtractor::getNormalizedCoGY(int index) {
-	return (double)coG[index].y/(double)binaryBox[index].rows;
+	double ret = (double)coG[index].y/(double)binaryBox[index].rows;
+	if (ret < 0 || ret > 1) {
+		return 0.5;
+	} else {
+		return ret;
+	}
 }
 
-
-void FeaturesExtractor::find_moments(Mat& gray)
-{
-    Mat canny_output;
-    vector<vector<Point> > contours;
-    vector<Vec4i> hierarchy;
- 
-    /// Detect edges using canny
-    Canny( gray, canny_output, 50, 150, 3 );
-    /// Find contours
-    //findContours(canny_output, contours, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
-	Moments mom = moments( canny_output, true );
-}
 
 double FeaturesExtractor::getMaxProjectionX(int index)
 {
