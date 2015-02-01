@@ -1,7 +1,10 @@
 #include "ArffCreator.h"
 
-ArffCreator::ArffCreator(string filename, string folder)
+ArffCreator::ArffCreator(string filename, string folder, int div, bool hu, int huMax)
 {
+	this->dividingFactor = div;
+	this->hu = hu;
+	this->huMax = huMax;
 	openArffFile(filename + ".arff");
 	this->folder = folder;
 }
@@ -22,13 +25,14 @@ void ArffCreator::writeHeader(string relation, list<pair<string, string>> attrib
 	fichier << endl << endl;
 }
 
-void ArffCreator::writeData(list<list<string>> data)
+void ArffCreator::writeData(vector<vector<string>> data)
 {
 	fichier << "@DATA";
+
 	for (auto i = data.begin() ; i != data.end() ; i++)
 	{		
 		fichier << endl;
-		list<string> l = *i;
+		vector<string> l = *i;
 		for (auto j = l.begin() ; j != l.end() ; j++)
 		{
 			if (j != l.begin())
@@ -51,19 +55,14 @@ void ArffCreator::closeArffFile()
 }
 
 void ArffCreator::extract() {
-	int dividingFactor = 25;
-
-	bool hu = false;
-	int huMax = 8;
-
 	DIR *pDIR;
 	string ext = ".png";
 
-	// Cration du ArffCreator
-	list<list<string>> data;
+	// Data container inialization
+	vector<vector<string>> data;
 	list<pair<string, string>> features;	
 	
-	// Ecriture du Header du fichier Arff
+	// Header creation
 	for (int index = 0; index < dividingFactor + 1; index++) {
 		stringstream sstm;
 		sstm << "BBBarycenterX" << index;
@@ -86,14 +85,12 @@ void ArffCreator::extract() {
 			}
 		}
 	}
-	//features.push_back(list<pair<string, string>>::value_type("IndexX", "NUMERIC"));
-	//features.push_back(list<pair<string, string>>::value_type("IndexY", "NUMERIC"));
 	features.push_back(list<pair<string, string>>::value_type("BBRatio", "NUMERIC"));
 	features.push_back(list<pair<string, string>>::value_type("class", "{accident,bomb,car,casualty,electricity,fire,fire_brigade,flood,gas,injury,paramedics,person,police,roadblock}"));
 	writeHeader("Features", features);
 
 
-	// Recolte des données
+	// Images pocessing
 	struct dirent *entry;
 	if (pDIR=opendir(this->folder.c_str())) {
 		while(entry = readdir(pDIR)){
@@ -104,7 +101,7 @@ void ArffCreator::extract() {
 				if (imageName.find(ext) != string::npos) {
 					FeaturesExtractor tmp(this->folder + imageName, dividingFactor);
                     if(tmp.getRatioColor(0) < 0.99) { // check if image is not white
-						list<string> datum;
+						vector<string> datum;
 						for (int index = 0; index < dividingFactor + 1; index++) {
 							datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGX(index))));
 							datum.push_back(std::to_string((long double)(tmp.getNormalizedCoGY(index))));
@@ -115,34 +112,28 @@ void ArffCreator::extract() {
 								}
 							}
 						}
-						//datum.push_back(std::to_string((long double)(tmp.getMaxProjectionX(0))));
-						//datum.push_back(std::to_string((long double)(tmp.getMaxProjectionY(0))));
 						datum.push_back(std::to_string((long double)(tmp.getRatioBB(0))));
 						datum.push_back(tmp.getClass());
-					
+						//cout << imageName << endl;
 						data.push_back(datum);
 					} else {
 						cout << "Arghh " << imageName << endl;
 					}
-					//
 				} 
 			}
 		}
 		closedir(pDIR);
 	}
-	
-	// Ecriture des donnees dans le fichier Arff
+
 	writeData(data);
 }
 
-/*
-int main(){
 
-	ArffCreator ac("test25basic", "Result_irf_test/");
-	//ArffCreator ac("final", "samples/");
+int main(){
+	ArffCreator ac("train9", "Result/", 9, false, 3);
 	ac.extract();
-	waitKey(0);
 	cout << "I am done" << endl;
-	Sleep(100000);
-}*/
+	waitKey(0);
+	//Sleep(100000);
+}
 

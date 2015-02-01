@@ -1,7 +1,7 @@
 #include "FeaturesExtractor.h"
 
-
-int main2(){
+/*
+int main(){
 	// Recolte des données
 	struct dirent *entry;
 	DIR *pDIR;
@@ -23,49 +23,48 @@ int main2(){
 	waitKey(0);
 	Sleep(100000);
 	return 0;
-}
+}*/
 
 FeaturesExtractor::FeaturesExtractor(string source, int div) {
-	//cout << source << endl;
-
 	this->div = div;
-
 	this->name = source;
 	this->originalImg = imread(name);
 	this->binaryImg = Mat(originalImg.rows, originalImg.cols, CV_BGR2GRAY);
 	this->greyscaleImg = Mat(originalImg.rows, originalImg.cols, CV_THRESH_BINARY);
 
-	//GaussianBlur(this->greyscaleImg, this->greyscaleImg, Size(3, 3), 0, 0, BORDER_DEFAULT);
-	
-	medianBlur(this->greyscaleImg, this->greyscaleImg, 5);
-	Laplacian(this->greyscaleImg, this->greyscaleImg, CV_16S, 3, 1, 0, BORDER_DEFAULT );
-
+	// Preprocessing
 	cvtColor(this->originalImg, this->greyscaleImg, CV_BGR2GRAY);
+	medianBlur(this->greyscaleImg, this->greyscaleImg, 5);
+	GaussianBlur(this->greyscaleImg, this->greyscaleImg, Size(3, 3), 0, 0, BORDER_DEFAULT);
 	threshold(this->greyscaleImg, this->binaryImg, 230, 255, CV_THRESH_BINARY);
 
-	/*imshow("color", originalImg);
-	imshow("greyscale", greyscaleImg);
-	imshow("binar", binaryImg);*/
+	// Calculation of BoudingBox
 	Rect bb = this->find_boundingBox();
 
-
+	// Division of imags
+	// main image and sub-images are added to a vector
 	this->originalBox = vector<Mat>(div + 1);
 	this->binaryBox = vector<Mat>(div + 1);
 	this->greyscaleBox = vector<Mat>(div + 1);
 
 	try {
-	this->greyscaleBox[0] = this->greyscaleImg(bb);
-	this->binaryBox[0] = this->binaryImg(bb);
-	this->originalBox[0] = this->originalImg(bb);
+		this->greyscaleBox[0] = this->greyscaleImg(bb);
+		this->binaryBox[0] = this->binaryImg(bb);
+		this->originalBox[0] = this->originalImg(bb);
 	} catch(...) {
 		cout << "wrong " << name << endl; 
 	}
-		
+	divide();	
 
-	divide();
+	// computation of center of gravity on all (sub) images
 	computeCoG();
 }
 
+
+/*
+ * Divide image in sub images according to a diving factor
+ * Main image and sub-images are added to a vector
+ */
 void FeaturesExtractor::divide() {
 	int r = sqrt((double) div);
 	int c = r;
@@ -87,7 +86,9 @@ void FeaturesExtractor::divide() {
 	}
 }
 
-
+/*
+ * Calculate and return the bounding box of the original image
+ */
 Rect FeaturesExtractor::find_boundingBox() {
 	unsigned char *input = (unsigned char*)(binaryImg.data);
 
@@ -137,7 +138,9 @@ Rect FeaturesExtractor::find_boundingBox() {
 	return cv::Rect(leftX, topY, (rightX-leftX), (bottomY-topY));
 }
 
-
+/*
+ * Return the class name
+ */
 string FeaturesExtractor::getClass()
 {
 	const std::string s = this->name;
@@ -148,30 +151,40 @@ string FeaturesExtractor::getClass()
         return match[1];
 }
 
-
-
-
-
+/*
+ * Return the bounding box ratio
+ * @param index of he sub image
+ */
 double FeaturesExtractor::getRatioBB(int index) {
 	return (double)originalBox[index].cols / (double)originalBox[index].rows;
 }
 
+/*
+ * Return the color ratio
+ * @param index of he sub image
+ */
 double FeaturesExtractor::getRatioColor(int index) {
 	return (double) countNonZero(binaryBox[index]) / ((double) binaryBox[index].rows*binaryBox[index].cols);
 }
 
+/*
+ * Return the Hu Moments
+ * @param index of he sub image
+ */
 vector<double> FeaturesExtractor::getHuMoments(int index) {
 	std::vector<double> ret;
 	double hu[7];
 	cv::HuMoments(cv::moments(binaryBox[index]), hu);
 	
 	for(int i=0;i<7;++i) {
-		ret.push_back(hu[i]);
+		ret.push_back(std::powf(10, 4*(i+1)) * hu[i]);
 	}
 	return ret;
 }
 
-
+/*
+ * Compute center of gravity
+ */
 void FeaturesExtractor::computeCoG() {
 	this->coG = vector<Point>(div + 1);
 	for (int index = 0; index < div + 1; index++) {
@@ -192,6 +205,10 @@ void FeaturesExtractor::computeCoG() {
 	}
 }
 
+/*
+ * Return nomalized center of gravity: x coordinate
+ * @param index of he sub image
+ */
 double FeaturesExtractor::getNormalizedCoGX(int index) {
 	double ret = (double)coG[index].x/(double)binaryBox[index].cols;
 	if (ret < 0 || ret > 1) {
@@ -202,6 +219,10 @@ double FeaturesExtractor::getNormalizedCoGX(int index) {
 	
 }
 
+/*
+ * Return nomalized center of gravity: y coordinate
+ * @param index of he sub image
+ */
 double FeaturesExtractor::getNormalizedCoGY(int index) {
 	double ret = (double)coG[index].y/(double)binaryBox[index].rows;
 	if (ret < 0 || ret > 1) {
@@ -211,7 +232,10 @@ double FeaturesExtractor::getNormalizedCoGY(int index) {
 	}
 }
 
-
+/*
+ * Return max histogram projection: x coordinate
+ * @param index of he sub image
+ */
 double FeaturesExtractor::getMaxProjectionX(int index)
 {
 	int valMax = 0;
@@ -230,10 +254,13 @@ double FeaturesExtractor::getMaxProjectionX(int index)
 			indexMax = x;
 		}
 	}
-	cout << "IndexX " << indexMax << " / " << binaryBox[index].cols << endl;
 	return (double)indexMax/(double)(binaryBox[index].cols);
 }
 
+/*
+ * Return max histogram projection: y coordinate
+ * @param index of he sub image
+ */
 double FeaturesExtractor::getMaxProjectionY(int index)
 {
 	int sumy = 0;
@@ -253,7 +280,6 @@ double FeaturesExtractor::getMaxProjectionY(int index)
 			indexMax = sumy;
 		}
 	}	
-	cout << "IndexY " << indexMax << " / " << binaryBox[index].rows << endl;
 	return (double)indexMax/(double)(binaryBox[index].rows);
 }
 

@@ -10,12 +10,15 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/core/core.hpp"
-//#include <math.h>
-
 
 using namespace std;
 using namespace cv;
 
+
+/*
+ * FeaturesExtractor class
+ * Compuate feaures on one image
+ */
 class FeaturesExtractor {
 	private:
 		Mat originalImg;
@@ -25,30 +28,26 @@ class FeaturesExtractor {
 		vector<Mat> originalBox;
 		vector<Mat> greyscaleBox;
 		vector<Mat> binaryBox;
+
 		string name;
 
 		vector<Point> coG;
 
 		int div;
 
-	public:
-		void extract();
+		Rect find_boundingBox();
+		void computeCoG();
+		void divide();
 
+	public:
 		FeaturesExtractor(string, int);
 
 		double getNormalizedCoGX(int);
 		double getNormalizedCoGY(int);
 		double getRatioBB(int);
 		double getRatioColor(int);
-		vector<double> getHuMoments(int);
-		string getClass();
 		double getMaxProjectionX(int);
 		double getMaxProjectionY(int);
-
-	private:
-		void calculateMoments(string);
-		Rect find_boundingBox();
-		void find_moments( Mat& gray );
-		void computeCoG();
-		void divide();
+		vector<double> getHuMoments(int);
+		string getClass();
 };

@@ -100,7 +100,7 @@ ImagesExtractor::~ImagesExtractor()
 {
 }
 
-
+/*
 int main(int argc, char* argv[])
 {
 	ImagesExtractor imgE(0);
@@ -110,3 +110,4 @@ int main(int argc, char* argv[])
 	Sleep(100000);
 }
 
+*/
