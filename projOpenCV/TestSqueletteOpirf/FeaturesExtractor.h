@@ -17,7 +17,7 @@ using namespace cv;
 
 /*
  * FeaturesExtractor class
- * Compuate feaures on one image
+ * Compute features on one image
  */
 class FeaturesExtractor {
 	private:

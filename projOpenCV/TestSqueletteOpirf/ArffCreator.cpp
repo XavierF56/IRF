@@ -130,7 +130,7 @@ void ArffCreator::extract() {
 
 
 int main(){
-	ArffCreator ac("train9", "Result/", 9, false, 3);
+	ArffCreator ac("train4", "Result/", 4, false, 3);
 	ac.extract();
 	cout << "I am done" << endl;
 	waitKey(0);

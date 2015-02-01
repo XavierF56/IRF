@@ -31,10 +31,6 @@ ImageAnalyser::ImageAnalyser(string imageName){
 	widthImage = ref.getWidthImage();
 
 	correct = this->getTemplate();
-
-	
-	//printPoints();
-	//displayMin(img, "img");
 }
 
 ImageAnalyser::~ImageAnalyser(){
@@ -94,9 +90,6 @@ void ImageAnalyser::rotate() {
 	double imgAngle = atan(imgRatio) * 180 / PI;
 	double correctionAngle = goodAngle - imgAngle;
 
-	//cout << "Ratio : " << imgRatio << endl << "good : " << goodAngle << endl << "bad : " << imgAngle << endl;
-	//cout << "Top : " <<  crossTop << endl << "Bottom : " << crossBottom << endl;
-
 	// create transformation
     cv::Mat r = cv::getRotationMatrix2D(crossBottom, correctionAngle, 1);
 	Mat dst;
@@ -111,10 +104,6 @@ void ImageAnalyser::rotate() {
 
 	// Racalculate topCross after rotation
 	this->getTopCross();
-
-
-	//imgRatio = ((double)crossBottom.y - (double)crossTop.y)/((double)crossTop.x - (double)crossBottom.x);
-	//cout << "Ratio : " << imgRatio << endl;
 }
 
 bool ImageAnalyser::getTemplate()  {
@@ -145,20 +134,13 @@ bool ImageAnalyser::getTemplate()  {
 			}
 			cvtColor(temp, temp, CV_RGB2GRAY);
 
-		
-
-			//Mat subMat(img, Rect(0, 3*img.rows/4, img.cols/4, img.rows/4));
-
 			cv::matchTemplate(image_roi, temp, result, CV_TM_CCOEFF_NORMED);
 			minMaxLoc(result, &minval, &maxval, NULL, NULL);
-			//imshow(temps[i], result);
-			//cout << temps[i] << " " << maxval << " " << minval << endl;
 			if(maxval > bestVal) {
 				bestVal = maxval;
 				bestMatch = temps[i];
 			}
 		}
-		// cout << bestMatch << endl;
 		if(bestVal < 0.5) return false;
 		labels[j] = bestMatch;
 	}
@@ -173,7 +155,6 @@ Mat ImageAnalyser::extract(int row, int column) {
 	Rect imageRect = images[index];
 
 	Mat ret = original(imageRect);
-	//imshow("name", ret);
 	return ret;
 }
 
@@ -206,15 +187,5 @@ void ImageAnalyser::displayMin(Mat input, string name) {
 	Mat res = Mat(tailleReduite, CV_8UC3); //cree une image à 3 canaux de profondeur 8 bits chacuns
 	resize(input, res, tailleReduite);
 	imshow(name, res);
-}
-
-int main2(int argc, char* argv[])
-{
-	ImageAnalyser img("w000-scans/00022.png");
-	//img.extract(2, 2);
-	cout << img.isCorrect()<< endl;;
-	waitKey(0);
-
-	return 0;
 }
 

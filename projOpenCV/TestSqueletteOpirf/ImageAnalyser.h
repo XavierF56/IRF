@@ -9,6 +9,11 @@
 using namespace std;
 using namespace cv;
 
+
+/*
+ * ImageAnalyser class
+ * Extract "Imagette" from one form
+ */
 class ImageAnalyser
 {
 	private:

@@ -8,6 +8,10 @@
 using namespace std;
 using namespace cv;
 
+/*
+ * ImagesExtractor class
+ * Build the database of images
+ */
 class ImagesExtractor
 {
 	public:
